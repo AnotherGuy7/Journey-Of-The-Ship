@@ -90,7 +90,6 @@ namespace Journey_Of_The_Ship
                 if (keyboardState.IsKeyDown(Keys.Space) && shootTimer <= 0)
                 {
                     Shoot();
-                    UI.WarningOverlay.ShowWarning(5 * 60);
                 }
                 UpdatePlayerDash(keyboardState, velocity);
             }

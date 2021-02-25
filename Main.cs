@@ -34,6 +34,7 @@ namespace Journey_Of_The_Ship
         private Matrix screenMatrix;
 
         public Player player;
+        public PlayerUI playerUI;
 
         public static int playerHealth = 6;
         public static int gameDifficulty = 1;
@@ -42,7 +43,7 @@ namespace Journey_Of_The_Ship
         public static int screenShakeIntensity = 0;
 
         public static GameStates gameState = GameStates.GameState_Playing;
-        public static Events activeEvent = Events.AsteroidField;
+        public static Events activeEvent = Events.None;
 
         public static int desiredResolutionWidth = 167;     //The resolution that the game will actually use, or "screen-space"
         public static int desiredResolutionHeight = 200;
@@ -91,6 +92,7 @@ namespace Journey_Of_The_Ship
             ReInitializeGame();
 
             parallax = new ParallaxBackground();
+            PlayerUI.InitializePlayerUI();
         }
 
         protected override void LoadContent()
@@ -104,7 +106,7 @@ namespace Journey_Of_The_Ship
             Laser.laserTexture = Content.Load<Texture2D>("Textures/Objects/Laser");
             UFO.ufoSpritesheet = Content.Load<Texture2D>("Textures/Spritesheets/UFO");
 
-            int amountOfAsteroids = 2;
+            int amountOfAsteroids = 5;
             Asteroid.asteroidTextures = new Texture2D[amountOfAsteroids];
             for (int a = 0; a < amountOfAsteroids; a++)
             {
@@ -135,6 +137,8 @@ namespace Journey_Of_The_Ship
             ParallaxBackground.spaceSet1[0] = Content.Load<Texture2D>("Textures/Backgrounds/SpaceBackgroundSet1/Space1_Part1");
             ParallaxBackground.spaceSet1[1] = Content.Load<Texture2D>("Textures/Backgrounds/SpaceBackgroundSet1/Space1_Part2");
 
+            PlayerUI.playerHealthMark = Content.Load<Texture2D>("Textures/UI/HealthBarMark");
+            PlayerUI.playerHealthOutlines = Content.Load<Texture2D>("Textures/UI/HealthBarOutlines");
             WarningOverlay.warningOverlayTexture = Content.Load<Texture2D>("Textures/UI/AsteroidFieldWarningLines");
             WarningOverlay.warningOverlayMark = Content.Load<Texture2D>("Textures/UI/AsteroidFieldWarningMark");
         }
@@ -269,7 +273,7 @@ namespace Journey_Of_The_Ship
             player.position.Y = 180f;
             activeEntities.Add(player);
 
-            playerHealth = 5;
+            playerHealth = 6;
             gameDifficulty = 1;
             gameScore = 1;
 
@@ -298,10 +302,10 @@ namespace Journey_Of_The_Ship
         {
             if (activeEvent == Events.None)
             {
-                if (random.Next(1, 200) == 1)
+                if (random.Next(1, 600) == 1)
                 {
                     activeEvent = Events.AsteroidField;
-                    WarningOverlay.ShowWarning(5 * 60);
+                    WarningOverlay.ShowWarning(3 * 60);
                 }
             }
         }
@@ -319,14 +323,14 @@ namespace Journey_Of_The_Ship
                     }
                     break;
                 case Events.AsteroidField:
-                    if (random.Next(1, 250) == 1)
+                    if (random.Next(1, 120) == 1)
                     {
-                        int asteroidType = random.Next(0, 1 + 1);
-                        float asteroidSpawnPosX = random.Next(40, desiredResolutionWidth - 40);
+                        int asteroidType = random.Next(0, 4 + 1);
+                        float asteroidSpawnPosX = random.Next(24, desiredResolutionWidth - 24);
                         float asteroidSpawnPosY = -50;
                         float asteroidFallSpeed = (float)random.NextDouble() * 0.2f;
-                        float asteroidScale = (float)(random.Next(40, 100 + 1)) / 100f;
-                        float asteroidRotation = (float)(random.Next(10, 200 + 1) / 2000f);
+                        float asteroidScale = (float)(random.Next(80, 100 + 1)) / 100f;
+                        float asteroidRotation = (float)(random.Next(10, 100 + 1) / 2000f);
                         Asteroid.NewAsteroid(asteroidType, new Vector2(asteroidSpawnPosX, asteroidSpawnPosY), new Vector2(0f, asteroidFallSpeed / (1.1f - (asteroidScale / 100f))), asteroidRotation, asteroidScale);
                     }
                     break;

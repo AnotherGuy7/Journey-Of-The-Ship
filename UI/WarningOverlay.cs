@@ -10,9 +10,9 @@ namespace Journey_Of_The_Ship.UI
 
         private Color drawColor = Color.White;
 
-        private Vector2 upperMarkPositions = new Vector2(0f, 83f);
+        private Vector2 upperMarkPositions = new Vector2(-12f, 83f);
         private Vector2 lowerMarkPositions = new Vector2(0f, 113f);
-        private Vector2 textPosition = new Vector2(4f, 82f);
+        private Vector2 textPosition = new Vector2(Main.desiredResolutionWidth / 2f - 40f, 86f);
 
         private int showTimer = 0;
         private int colorChangeTimer;
@@ -28,15 +28,15 @@ namespace Journey_Of_The_Ship.UI
         public override void Update()
         {
             upperMarkPositions.X += 1f;
-            if (upperMarkPositions.X >= 12f)
+            if (upperMarkPositions.X >= 0f)
             {
-                upperMarkPositions.X = 0f;
+                upperMarkPositions.X = -12f;
             }
 
-            upperMarkPositions.X -= 1f;
-            if (upperMarkPositions.X <= -12f)
+            lowerMarkPositions.X -= 1f;
+            if (lowerMarkPositions.X <= -12f)
             {
-                upperMarkPositions.X = 0f;
+                lowerMarkPositions.X = 0f;
             }
 
             if (colorChangeTimer >= 30)
@@ -56,10 +56,9 @@ namespace Journey_Of_The_Ship.UI
                 colorChangeTimer--;
             }
 
-            float red = MathHelper.Lerp(Color.White.R, Color.Red.R, (float)colorChangeTimer / 30f);
-            float green = MathHelper.Lerp(Color.White.R, Color.Red.R, (float)colorChangeTimer / 30f);
-            float blue = MathHelper.Lerp(Color.White.R, Color.Red.R, (float)colorChangeTimer / 30f);
-            drawColor = new Color(red, green, blue);
+            drawColor.R = (byte)MathHelper.Lerp(Color.White.R, Color.Red.R, 1f - ((float)colorChangeTimer / 30f));
+            drawColor.G = (byte)MathHelper.Lerp(Color.White.G, Color.Red.G, 1f - ((float)colorChangeTimer / 30f));
+            drawColor.B = (byte)MathHelper.Lerp(Color.White.B, Color.Red.B, 1f - ((float)colorChangeTimer / 30f));
 
             showTimer--;
             if (showTimer <= 0)

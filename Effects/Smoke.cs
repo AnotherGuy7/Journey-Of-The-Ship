@@ -60,10 +60,9 @@ namespace Journey_Of_The_Ship.Effects
             if (colorChangeTimer > 0)
             {
                 colorChangeTimer--;
-                float red = (byte)MathHelper.Lerp(startColor.R, endColor.R, 1f - ((float)colorChangeTimer / (float)colorChangeTimerStart));
-                float green = (byte)MathHelper.Lerp(startColor.G, endColor.G, 1f - ((float)colorChangeTimer / (float)colorChangeTimerStart));
-                float blue = (byte)MathHelper.Lerp(startColor.B, endColor.B, 1f - ((float)colorChangeTimer / (float)colorChangeTimerStart));
-                smokeColor = new Color(red, green, blue);
+                smokeColor.R = (byte)MathHelper.Lerp(startColor.R, endColor.R, 1f - ((float)colorChangeTimer / (float)colorChangeTimerStart));
+                smokeColor.G = (byte)MathHelper.Lerp(startColor.G, endColor.G, 1f - ((float)colorChangeTimer / (float)colorChangeTimerStart));
+                smokeColor.B = (byte)MathHelper.Lerp(startColor.B, endColor.B, 1f - ((float)colorChangeTimer / (float)colorChangeTimerStart));
             }
         }
 

@@ -102,6 +102,9 @@ namespace Journey_Of_The_Ship.Enemies
             }
             if (collider is Asteroid)
             {
+                Asteroid collidingAsteroid = collider as Asteroid;
+                collidingAsteroid.health -= 2;
+                Explosion.NewExplosion(collidingAsteroid.position, Vector2.Zero);
                 health = 0;
             }
         }

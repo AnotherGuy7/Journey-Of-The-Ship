@@ -6,19 +6,16 @@ using System.Linq;
 
 namespace Journey_Of_The_Ship.Obstacles
 {
-    public class Asteroid : CollisionBody
+    public class Asteroid : Projectile
     {
         public static Texture2D[] asteroidTextures;
 
+        public int health = 5;
+
         private Texture2D texture;
-        private Vector2 position;
-        private Vector2 velocity;
         private float rotationToAdd = 0f;
         private int asteroidWidth = 23;
         private int asteroidHeight = 23;
-
-        private int health = 5;
-        private int lifeTimer = 30 * 60;
 
         private float rotation;
         private float scale;
@@ -34,7 +31,12 @@ namespace Journey_Of_The_Ship.Obstacles
             newInstance.asteroidWidth = newInstance.texture.Width;
             newInstance.asteroidHeight = newInstance.texture.Height;
             newInstance.hitbox = new Rectangle((int)position.X, (int)position.Y, newInstance.asteroidWidth, newInstance.asteroidHeight);
-            Main.activeEntities.Add(newInstance);
+
+            if (asteroidType == 1)
+            {
+                newInstance.rotationToAdd = 0f;
+            }
+            Main.activeProjectiles.Add(newInstance);
         }
 
         public override void Update()
@@ -51,13 +53,12 @@ namespace Journey_Of_The_Ship.Obstacles
 
             if (health <= 0)
             {
-                SpawnGore(5);
+                SpawnGore(Main.random.Next(3, 5 + 1));
                 Main.StartScreenShake(8, 1);
                 DestroyInstance(this);
             }
 
-            lifeTimer--;
-            if (lifeTimer <= 0)
+            if (position.Y > Main.desiredResolutionHeight + (asteroidHeight / 2f))
             {
                 DestroyInstance(this);
             }
@@ -80,7 +81,7 @@ namespace Journey_Of_The_Ship.Obstacles
         public void DestroyInstance(Asteroid asteroid)
         {
             Main.gameScore += 1;
-            Main.activeEntities.Remove(asteroid);
+            Main.activeProjectiles.Remove(asteroid);
         }
 
         private void SpawnGore(int amount)
@@ -90,7 +91,8 @@ namespace Journey_Of_The_Ship.Obstacles
                 int goreType = Main.random.Next(2, 3 + 1);
                 Vector2 pos = position + new Vector2(Main.random.Next(0, asteroidWidth), Main.random.Next(0, asteroidHeight));
                 Vector2 vel = new Vector2(Main.random.Next(-2, 3) / 5f, Main.random.Next(1, 5) / 5f);
-                Gore.NewGoreParticle(goreType, pos, vel, 8f, 0.9f, Main.random.Next(0, 100) / 1000f);
+                float goreScale = Main.random.Next(50, 100 + 1) / 100f;
+                Gore.NewGoreParticle(goreType, pos, vel, 8f, goreScale, Main.random.Next(0, 100) / 1000f);
             }
         }
 
