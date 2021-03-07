@@ -1,7 +1,9 @@
 ﻿using Journey_Of_The_Ship.Effects;
+using Journey_Of_The_Ship.Enemies;
 using Journey_Of_The_Ship.PowerUps;
 using Journey_Of_The_Ship.Projectiles;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
@@ -11,8 +13,12 @@ namespace Journey_Of_The_Ship
 {
     public class Player : CollisionBody
     {
+        public override CollisionType[] colliderTypes => new CollisionType[4] { CollisionType.Enemies, CollisionType.Obstacles, CollisionType.PowerUp, CollisionType.Projectiles };
+        public override CollisionType collisionType => CollisionType.Player;
+
         public static Texture2D playerSpritesheet;
         public static Texture2D playerAfterImageTexture;
+        public static SoundEffect shootSound;
 
         private const int PlayerWidth = 21;
         private const int PlayerHeight = 19;
@@ -30,6 +36,7 @@ namespace Journey_Of_The_Ship
         private int frame = 0;
         private int frameCounter = 0;
         private int explosionCounter = 0;
+        private int turretNumber = 0;
         private bool canMove = false;
         private bool dying = false;
         private Rectangle animationRect;
@@ -61,8 +68,10 @@ namespace Journey_Of_The_Ship
 
             AnimateShip();
             HandleAfterImages();
-            CollisionBody[] bodiesArray = Main.activeProjectiles.ToArray();
+            CollisionBody[] bodiesArray = Main.activeEntities.ToArray();
             DetectCollisions(bodiesArray.ToList());
+            CollisionBody[] projectilesArray = Main.activeProjectiles.ToArray();
+            DetectCollisions(projectilesArray.ToList());
             Vector2 velocity = Vector2.Zero;
             canMove = !dying;
 
@@ -90,6 +99,7 @@ namespace Journey_Of_The_Ship
                 if (keyboardState.IsKeyDown(Keys.Space) && shootTimer <= 0)
                 {
                     Shoot();
+                    shootSound.Play(Main.soundEffectVolume, Main.random.Next(0, 101) / 100f, 0f);
                 }
                 UpdatePlayerDash(keyboardState, velocity);
             }
@@ -136,15 +146,48 @@ namespace Journey_Of_The_Ship
 
         private void Shoot()
         {
+            Vector2 shootPos = position;
             switch (shootLevel)
             {
                 case 1:
                     shootTimer += 30;
-                    Bullet.NewBullet(position + centerTurretOffset, new Vector2(0f, -shootSpeed), true);
+                    Bullet.NewBullet(shootPos + centerTurretOffset, new Vector2(0f, -shootSpeed), true);
                     break;
                 case 2:
-                    shootTimer += 10;
-                    Bullet.NewBullet(position + centerTurretOffset, new Vector2(0f, -shootSpeed), true);
+                    turretNumber++;
+                    if (turretNumber > 1)
+                        turretNumber = 0;
+
+                    shootTimer += 25;
+                    if (turretNumber == 0)
+                    {
+                        shootPos += leftTurretOffset;
+                    }
+                    else
+                    {
+                        shootPos += rightTurretOffset;
+                    }
+                    Bullet.NewBullet(shootPos, new Vector2(0f, -shootSpeed), true);
+                    break;
+                case 3:
+                    turretNumber++;
+                    if (turretNumber > 2)
+                        turretNumber = 0;
+
+                    shootTimer += 20;
+                    if (turretNumber == 0)
+                    {
+                        shootPos += leftTurretOffset;
+                    }
+                    else if (turretNumber == 1)
+                    {
+                        shootPos += centerTurretOffset;
+                    }
+                    else if (turretNumber == 2)
+                    {
+                        shootPos += rightTurretOffset;
+                    }
+                    Bullet.NewBullet(shootPos, new Vector2(0f, -shootSpeed), true);
                     break;
             }
         }
@@ -223,28 +266,42 @@ namespace Journey_Of_The_Ship
             }
         }
 
-        public override void HandleCollisions(CollisionBody collider)
+        public override void HandleCollisions(CollisionBody collider, CollisionType colliderType)
         {
-            if (collider is Projectile)
+            //if (collisionType == CollisionType.PowerUp)
             {
-                Projectile collidingProjectile = collider as Projectile;
-                if (!collidingProjectile.friendly)
+                if (collider is PowerUp)
                 {
-                    Main.playerHealth -= 1;
-                    if (Main.playerHealth <= 0)
+                    PowerUp powerUp = collider as PowerUp;
+                    if (powerUp.powerUpType == PowerUp.Attack)
                     {
-                        dying = true;
+                        shootLevel += 1;
+                        powerUp.DestoryInstance(powerUp);
                     }
-                    Explosion.NewExplosion(collidingProjectile.position, Vector2.Zero);
-                    collidingProjectile.DestroyInstance(collidingProjectile);
                 }
             }
-            else if (collider is PowerUp)
+            //if (colliderType == CollisionType.Projectiles)
             {
-                PowerUp powerUp = collider as PowerUp;
-                if (powerUp.powerUpType == PowerUp.Attack)
+                if (collider is Projectile)
                 {
-                    shootLevel += 1;
+                    Projectile collidingProjectile = collider as Projectile;
+                    if (!collidingProjectile.friendly)
+                    {
+                        Main.playerHealth -= 1;
+                        if (Main.playerHealth <= 0)
+                        {
+                            dying = true;
+                        }
+                        Explosion.NewExplosion(collidingProjectile.position, Vector2.Zero);
+                        collidingProjectile.DestroyInstance(collidingProjectile);
+                    }
+                }
+            }
+            //if (colliderType == CollisionType.Enemies)
+            {
+                if (collider is Slicer)
+                {
+                    Main.playerHealth -= 1;
                 }
             }
         }

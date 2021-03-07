@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Journey_Of_The_Ship.Effects
@@ -6,6 +7,7 @@ namespace Journey_Of_The_Ship.Effects
     public class Explosion : VisualEffect
     {
         public static Texture2D explosionSpritesheet;
+        public static SoundEffect explosionSound;
 
         private const int MaxFrames = 5;
         private const int ExplosionWidth = 16;
@@ -15,6 +17,8 @@ namespace Journey_Of_The_Ship.Effects
         private Vector2 velocity = Vector2.Zero;
         private Rectangle animRect;
         private float rotation;
+
+        private bool playedSound = false;
 
         public static void NewExplosion(Vector2 position, Vector2 velocity, float rotation = 0f)
         {
@@ -44,6 +48,12 @@ namespace Journey_Of_The_Ship.Effects
             if (velocity != Vector2.Zero)
             {
                 position += velocity;
+            }
+
+            if (!playedSound)
+            {
+                explosionSound.Play();
+                playedSound = true;
             }
         }
 

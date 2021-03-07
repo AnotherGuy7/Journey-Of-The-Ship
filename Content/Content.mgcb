@@ -20,6 +20,36 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/MainFont.spritefont
 
+#begin Sounds/Explosion_3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Explosion_3.wav
+
+#begin Sounds/MiscEffect_1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/MiscEffect_1.wav
+
+#begin Sounds/PlayerShoot.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/PlayerShoot.wav
+
+#begin Sounds/UFODying.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/UFODying.wav
+
+#begin Sounds/UFOShoot.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/UFOShoot.wav
+
 #begin Textures/Backgrounds/SpaceBackgroundSet1/Space1_Part1.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -164,6 +194,30 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/Gore/Gore_4.png
 
+#begin Textures/Objects/Gore/Gore_5.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/Gore/Gore_5.png
+
+#begin Textures/Objects/Gore/Gore_6.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/Gore/Gore_6.png
+
 #begin Textures/Objects/Laser.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -272,6 +326,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/Power-Ups/RedRing.png
 
+#begin Textures/Objects/SlicerAfterImage.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/SlicerAfterImage.png
+
 #begin Textures/Objects/SmokePuff.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -332,6 +398,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Spritesheets/PlayerShip.png
 
+#begin Textures/Spritesheets/Slicer.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Spritesheets/Slicer.png
+
 #begin Textures/Spritesheets/UFO.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -344,7 +422,7 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Spritesheets/UFO.png
 
-#begin Textures/UI/AsteroidFieldIcon.png
+#begin Textures/UI/AsteroidEnvironmentIcon.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -354,7 +432,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/UI/AsteroidFieldIcon.png
+/build:Textures/UI/AsteroidEnvironmentIcon.png
 
 #begin Textures/UI/AsteroidFieldWarningLines.png
 /importer:TextureImporter
@@ -380,7 +458,7 @@
 /processorParam:TextureFormat=Color
 /build:Textures/UI/AsteroidFieldWarningMark.png
 
-#begin Textures/UI/HealthBarMark.png
+#begin Textures/UI/ClearEnvironmentIcon.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -390,7 +468,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/UI/HealthBarMark.png
+/build:Textures/UI/ClearEnvironmentIcon.png
 
 #begin Textures/UI/HealthBarMark.png
 /importer:TextureImporter
@@ -403,18 +481,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/UI/HealthBarMark.png
-
-#begin Textures/UI/HealthBarOutlines.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/UI/HealthBarOutlines.png
 
 #begin Textures/UI/HealthBarOutlines.png
 /importer:TextureImporter

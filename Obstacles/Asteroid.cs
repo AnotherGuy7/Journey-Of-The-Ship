@@ -8,6 +8,9 @@ namespace Journey_Of_The_Ship.Obstacles
 {
     public class Asteroid : Projectile
     {
+        public override CollisionType[] colliderTypes => new CollisionType[3] { CollisionType.Player, CollisionType.Enemies, CollisionType.Projectiles };
+        public override CollisionType collisionType => CollisionType.Obstacles;
+
         public static Texture2D[] asteroidTextures;
 
         public int health = 5;
@@ -64,7 +67,7 @@ namespace Journey_Of_The_Ship.Obstacles
             }
         }
 
-        public override void HandleCollisions(CollisionBody collider)
+        public override void HandleCollisions(CollisionBody collider, CollisionType colliderType)
         {
             if (collider is Projectile)
             {

@@ -5,6 +5,9 @@ namespace Journey_Of_The_Ship.Projectiles
 {
     public class Bullet : Projectile
     {
+        public override CollisionType[] colliderTypes => new CollisionType[2] { CollisionType.Enemies, CollisionType.Obstacles };
+        public override CollisionType collisionType => CollisionType.Projectiles;
+
         public static Texture2D bulletTexture;
 
         private const int MaxLifeTime = 3 * 60;

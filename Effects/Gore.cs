@@ -11,6 +11,8 @@ namespace Journey_Of_The_Ship.Effects
         public const int UFOGorePiece2 = 1;
         public const int AsteroidChunkPiece1 = 2;
         public const int AsteroidChunkPiece2 = 3;
+        public const int SlicerGorePiece = 4;
+        public const int SlicerGorePiece2 = 5;
 
         private Texture2D texture;
         private Vector2 position;

@@ -1,12 +1,15 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Journey_Of_The_Ship.Projectiles;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Collections.Generic;
 
 namespace Journey_Of_The_Ship.PowerUps
 {
     public class PowerUp : CollisionBody
     {
+        public override CollisionType[] colliderTypes => new CollisionType[1] { CollisionType.Player };
+        public override CollisionType collisionType => CollisionType.PowerUp;
+
         public static Texture2D[] powerUpTextures = new Texture2D[5];
         public static Texture2D[] powerUpAuras = new Texture2D[5];
 
@@ -49,12 +52,12 @@ namespace Journey_Of_The_Ship.PowerUps
                 DestoryInstance(this);
             }
 
-            auraTimer += 0.0045f;
+            auraTimer += 0.045f;
             scale = 0.7f + ((float)Math.Sin(auraTimer) * 0.3f);
             auraRotation = auraTimer;
         }
 
-        private void DestoryInstance(PowerUp powerUp)
+        public void DestoryInstance(PowerUp powerUp)
         {
             Main.activeEntities.Remove(powerUp);
         }

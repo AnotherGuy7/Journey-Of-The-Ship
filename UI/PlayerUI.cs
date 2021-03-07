@@ -7,10 +7,13 @@ namespace Journey_Of_The_Ship.UI
     {
         public static Texture2D playerHealthOutlines;
         public static Texture2D playerHealthMark;
+        public static Texture2D clearEnvironmentIcon;
+        public static Texture2D asteroidEnvironmentIcon;
 
         private Vector2 scorePosition = new Vector2(1f, 1f);
         private Vector2 healthPosition = new Vector2(113f, 1f);
         private Vector2 healthBarOffset = new Vector2(26f, 5f);
+        private Vector2 environmentIconPosition = new Vector2(1f, 174f);
 
         private Color healthGreen = new Color(142, 246, 103);
         private Color healthRed = new Color(246, 103, 103);
@@ -50,8 +53,10 @@ namespace Journey_Of_The_Ship.UI
             switch (Main.activeEvent)
             {
                 case Main.Events.None:
+                    spriteBatch.Draw(clearEnvironmentIcon, environmentIconPosition, Color.White);
                     break;
                 case Main.Events.AsteroidField:
+                    spriteBatch.Draw(asteroidEnvironmentIcon, environmentIconPosition, Color.White);
                     break;
             }
         }

@@ -33,7 +33,7 @@ namespace Journey_Of_The_Ship
         private SpriteBatch _spriteBatch;
         private Matrix screenMatrix;
 
-        public Player player;
+        public static Player player;
         public PlayerUI playerUI;
 
         public static int playerHealth = 6;
@@ -49,6 +49,9 @@ namespace Journey_Of_The_Ship
         public static int desiredResolutionHeight = 200;
         public static int actualResolutionWidth = 500;      //The actual resolution the game will be drawn at (Window size)
         public static int actualResolutionHeight = 600;
+
+        public static float soundEffectVolume = 0.8f;
+        public static float musicVolume = 0.8f;
 
         private ParallaxBackground parallax;
         private Vector2 screenOffset;
@@ -105,6 +108,8 @@ namespace Journey_Of_The_Ship
             Bullet.bulletTexture = Content.Load<Texture2D>("Textures/Objects/Bullet");
             Laser.laserTexture = Content.Load<Texture2D>("Textures/Objects/Laser");
             UFO.ufoSpritesheet = Content.Load<Texture2D>("Textures/Spritesheets/UFO");
+            Slicer.slicerSpritesheet = Content.Load<Texture2D>("Textures/Spritesheets/Slicer");
+            Slicer.slicerAfterImageTexture = Content.Load<Texture2D>("Textures/Objects/SlicerAfterImage");
 
             int amountOfAsteroids = 5;
             Asteroid.asteroidTextures = new Texture2D[amountOfAsteroids];
@@ -120,7 +125,7 @@ namespace Journey_Of_The_Ship
                 Planet.planetsTextureArray[p] = Content.Load<Texture2D>("Textures/Objects/Planet_" + (p + 1));
             }
 
-            int amountOfGoreTextures = 4;
+            int amountOfGoreTextures = 6;
             Gore.goreTextures = new Texture2D[amountOfGoreTextures];
             for (int g = 0; g < amountOfGoreTextures; g++)
             {
@@ -139,8 +144,15 @@ namespace Journey_Of_The_Ship
 
             PlayerUI.playerHealthMark = Content.Load<Texture2D>("Textures/UI/HealthBarMark");
             PlayerUI.playerHealthOutlines = Content.Load<Texture2D>("Textures/UI/HealthBarOutlines");
+            PlayerUI.clearEnvironmentIcon = Content.Load<Texture2D>("Textures/UI/ClearEnvironmentIcon");
+            PlayerUI.asteroidEnvironmentIcon = Content.Load<Texture2D>("Textures/UI/AsteroidEnvironmentIcon");
             WarningOverlay.warningOverlayTexture = Content.Load<Texture2D>("Textures/UI/AsteroidFieldWarningLines");
             WarningOverlay.warningOverlayMark = Content.Load<Texture2D>("Textures/UI/AsteroidFieldWarningMark");
+
+            Player.shootSound = Content.Load<SoundEffect>("Sounds/PlayerShoot");
+            Explosion.explosionSound = Content.Load<SoundEffect>("Sounds/Explosion_3");
+            UFO.shootSound = Content.Load<SoundEffect>("Sounds/UFOShoot");
+            UFO.deathSound = Content.Load<SoundEffect>("Sounds/UFODying");
         }
 
         protected override void Update(GameTime gameTime)
@@ -302,7 +314,7 @@ namespace Journey_Of_The_Ship
         {
             if (activeEvent == Events.None)
             {
-                if (random.Next(1, 600) == 1)
+                if (random.Next(1, 25000) == 1)
                 {
                     activeEvent = Events.AsteroidField;
                     WarningOverlay.ShowWarning(3 * 60);
@@ -320,6 +332,12 @@ namespace Journey_Of_The_Ship
                         float spawnPosX = random.Next(25, desiredResolutionWidth - 25);
                         float spawnPosY = -50;
                         UFO.NewUFO(new Vector2(spawnPosX, spawnPosY));
+                    }
+                    if (random.Next(1, 320) == 1)
+                    {
+                        float spawnPosX = random.Next(25, desiredResolutionWidth - 25);
+                        float spawnPosY = -50;
+                        Slicer.NewSlicer(new Vector2(spawnPosX, spawnPosY));
                     }
                     break;
                 case Events.AsteroidField:

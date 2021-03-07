@@ -10,6 +10,9 @@ namespace Journey_Of_The_Ship.Enemies
 {
     public class BossUFO : CollisionBody
     {
+        public override CollisionType[] colliderTypes => new CollisionType[1] { CollisionType.Projectiles };
+        public override CollisionType collisionType => CollisionType.Enemies;
+
         public static Texture2D[] bossUFOAnimationArray;
         public Vector2 position;
 
@@ -78,7 +81,7 @@ namespace Journey_Of_The_Ship.Enemies
             }
         }
 
-        public override void HandleCollisions(CollisionBody collider)
+        public override void HandleCollisions(CollisionBody collider, CollisionType colliderType)
         {
             if (collider is Projectile)
             {

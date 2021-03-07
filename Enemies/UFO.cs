@@ -2,15 +2,20 @@
 using Journey_Of_The_Ship.Obstacles;
 using Journey_Of_The_Ship.Projectiles;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using System.Linq;
 
 namespace Journey_Of_The_Ship.Enemies
 {
-    public class UFO : CollisionBody
+    public class UFO : Enemy
     {
+        public override CollisionType[] colliderTypes => new CollisionType[1] { CollisionType.Projectiles };
+        public override CollisionType collisionType => CollisionType.Enemies;
+
         public static Texture2D ufoSpritesheet;
-        public Vector2 position;
+        public static SoundEffect shootSound;
+        public static SoundEffect deathSound;
 
         private const int UFOWidth = 27;
         private const int UFOHeight = 27;
@@ -29,6 +34,7 @@ namespace Journey_Of_The_Ship.Enemies
         private Vector2 deathVelocity;
         private int health = 3;
         private Rectangle animRect;
+        private bool playedSound = false;
 
         public static void NewUFO(Vector2 position)
         {
@@ -67,6 +73,7 @@ namespace Journey_Of_The_Ship.Enemies
             shootCounter++;
             if (shootCounter >= 4 * 60 && health > 0)
             {
+                shootSound.Play(Main.soundEffectVolume, Main.random.Next(0, 101) / 100f, 0f);
                 Laser.NewLaser(position + shootOffset, shootVelocity, false);
                 shootCounter = 0;
             }
@@ -76,15 +83,21 @@ namespace Journey_Of_The_Ship.Enemies
                 deathTimer++;
                 if (deathTimer >= 80)
                 {
-                    SpawnGore(4);
+                    SpawnGore(Main.random.Next(0, 1 + 1), UFOWidth, UFOHeight, 4);
                     Explosion.NewExplosion(position + new Vector2(UFOWidth / 2f, UFOHeight / 2f), Vector2.Zero);
+                    PowerUps.PowerUp.NewPowerUp(PowerUps.PowerUp.Attack, position + new Vector2(UFOWidth / 2f, UFOHeight / 2f), new Vector2(0f, 0.3f), 15);
                     Main.StartScreenShake(8, 1);
                     DestroyInstance(this);
+                }
+                if (!playedSound)
+                {
+                    deathSound.Play(Main.soundEffectVolume, 0f, 0f);
+                    playedSound = true;
                 }
             }
         }
 
-        public override void HandleCollisions(CollisionBody collider)
+        public override void HandleCollisions(CollisionBody collider, CollisionType colliderType)
         {
             if (collider is Projectile)
             {
@@ -128,22 +141,6 @@ namespace Journey_Of_The_Ship.Enemies
             }
         }
 
-        public void DestroyInstance(UFO ufo)
-        {
-            Main.gameScore += 1;
-            Main.activeEntities.Remove(ufo);
-        }
-
-        private void GenerateSmoke(int amount)
-        {
-            for (int s = 0; s < amount; s++)
-            {
-                Vector2 pos = position + new Vector2(Main.random.Next(0, UFOWidth), Main.random.Next(0, UFOHeight));
-                Vector2 vel = new Vector2(Main.random.Next(-2, 2) / 20.5f, -0.03f);
-                Smoke.NewSmokeParticle(pos, vel, Color.Orange, Color.Gray, 30, 90);
-            }
-        }
-
         private void SpawnDusts()
         {
             if (health == 2)
@@ -151,7 +148,7 @@ namespace Journey_Of_The_Ship.Enemies
                 smokeSpawnTimer++;
                 if (smokeSpawnTimer % 30 == 0)
                 {
-                    GenerateSmoke(2);
+                    GenerateSmoke(Color.Orange, Color.Gray, UFOWidth, UFOHeight, 2);
                 }
             }
             else if (health == 1)
@@ -159,24 +156,13 @@ namespace Journey_Of_The_Ship.Enemies
                 smokeSpawnTimer++;
                 if (smokeSpawnTimer % 15 == 0)
                 {
-                    GenerateSmoke(6);
+                    GenerateSmoke(Color.Orange, Color.Gray, UFOWidth, UFOHeight, 6);
                     rumbleOffset = new Vector2(Main.random.Next(-1, 2) / 2f, Main.random.Next(-1, 2) / 2f);
                 }
             }
             else if (health == 0)
             {
-                GenerateSmoke(4);
-            }
-        }
-
-        private void SpawnGore(int amount)
-        {
-            for (int g = 0; g < amount; g++)
-            {
-                int goreType = Main.random.Next(0, 1 + 1);
-                Vector2 pos = position + new Vector2(Main.random.Next(0, UFOWidth), Main.random.Next(0, UFOHeight));
-                Vector2 vel = new Vector2(Main.random.Next(-2, 3) / 5f, Main.random.Next(1, 5) / 5f);
-                Gore.NewGoreParticle(goreType, pos, vel, 8f, 0.8f, Main.random.Next(0, 100) / 1000f);
+                GenerateSmoke(Color.Orange, Color.Gray, UFOWidth, UFOHeight, 4);
             }
         }
 
