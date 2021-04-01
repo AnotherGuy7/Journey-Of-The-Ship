@@ -1,8 +1,6 @@
 ﻿using Journey_Of_The_Ship.Effects;
+using Journey_Of_The_Ship.PowerUps;
 using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Journey_Of_The_Ship.Enemies
 {
@@ -28,6 +26,22 @@ namespace Journey_Of_The_Ship.Enemies
                 Vector2 pos = position + new Vector2(Main.random.Next(0, width), Main.random.Next(0, height));
                 Vector2 vel = new Vector2(Main.random.Next(-2, 3) / 5f, Main.random.Next(1, 5) / 5f);
                 Gore.NewGoreParticle(goreType, pos, vel, 8f, 0.8f, Main.random.Next(0, 100) / 1000f);
+            }
+        }
+
+        public void DropAbilities(int baseChance, Vector2 offset)
+        {
+            if (Main.random.Next(0, 101) <= baseChance)
+            {
+                AbilityDrop.NewAbilityDrop(Main.random.Next(0, 1), position + offset, new Vector2(0f, 0.3f), 15);
+            }
+        }
+
+        public void DropPowerUp(int baseChance, Vector2 offset)
+        {
+            if (Main.random.Next(0, 101) <= baseChance)
+            {
+                PowerUp.NewPowerUp(Main.random.Next(0, 2 + 1), position + offset, new Vector2(0f, 0.3f), 15);
             }
         }
 

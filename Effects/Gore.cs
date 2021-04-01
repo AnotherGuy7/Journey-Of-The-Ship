@@ -13,6 +13,11 @@ namespace Journey_Of_The_Ship.Effects
         public const int AsteroidChunkPiece2 = 3;
         public const int SlicerGorePiece = 4;
         public const int SlicerGorePiece2 = 5;
+        public const int RayGorePiece1 = 6;
+        public const int RayGorePiece2 = 7;
+        public const int StasisGorePiece1 = 8;
+        public const int StasisGorePiece2 = 9;
+        public const int StasisGorePiece3 = 10;
 
         private Texture2D texture;
         private Vector2 position;

@@ -9,6 +9,7 @@ namespace Journey_Of_The_Ship.UI
         public static Texture2D playerHealthMark;
         public static Texture2D clearEnvironmentIcon;
         public static Texture2D asteroidEnvironmentIcon;
+        public static float uiAlpha = 0f;
 
         private Vector2 scorePosition = new Vector2(1f, 1f);
         private Vector2 healthPosition = new Vector2(113f, 1f);
@@ -35,15 +36,15 @@ namespace Journey_Of_The_Ship.UI
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(playerHealthOutlines, healthPosition, Color.White);
+            spriteBatch.Draw(playerHealthOutlines, healthPosition, Color.White * uiAlpha);
 
             for (int h = 0; h < Main.playerHealth; h++)
             {
                 Vector2 pos = healthPosition + healthBarOffset + new Vector2(-5f * h, 0f);
-                spriteBatch.Draw(playerHealthMark, pos, healthMarkDrawColor);
+                spriteBatch.Draw(playerHealthMark, pos, healthMarkDrawColor * uiAlpha);
             }
 
-            spriteBatch.DrawString(Main.mainFont, "Score: " + Main.gameScore, scorePosition, Color.White, 0f, Vector2.Zero, 0.7f, SpriteEffects.None, 0f);
+            spriteBatch.DrawString(Main.mainFont, "Score: " + Main.gameScore, scorePosition, Color.White * uiAlpha, 0f, Vector2.Zero, 0.7f, SpriteEffects.None, 0f);
 
             DrawEnvironmentalIcon(spriteBatch);
         }
@@ -53,10 +54,10 @@ namespace Journey_Of_The_Ship.UI
             switch (Main.activeEvent)
             {
                 case Main.Events.None:
-                    spriteBatch.Draw(clearEnvironmentIcon, environmentIconPosition, Color.White);
+                    spriteBatch.Draw(clearEnvironmentIcon, environmentIconPosition, Color.White * uiAlpha);
                     break;
                 case Main.Events.AsteroidField:
-                    spriteBatch.Draw(asteroidEnvironmentIcon, environmentIconPosition, Color.White);
+                    spriteBatch.Draw(asteroidEnvironmentIcon, environmentIconPosition, Color.White * uiAlpha);
                     break;
             }
         }

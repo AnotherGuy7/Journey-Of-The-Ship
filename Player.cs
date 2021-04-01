@@ -19,16 +19,18 @@ namespace Journey_Of_The_Ship
         public static Texture2D playerSpritesheet;
         public static Texture2D playerAfterImageTexture;
         public static SoundEffect shootSound;
+        public static SoundEffect dashSound;
 
         private const int PlayerWidth = 21;
         private const int PlayerHeight = 19;
         private const int MaxFrames = 4;
-        private const float MoveSpeed = 1.5f;
         private const int DashDetectionTime = 5;
         private const int DashDurationTime = 10;
         private const int DashCooldownTime = 120;
+        private const int RapidFireAbility = 0;
 
         public Vector2 position;
+        public bool canMove = false;
 
         private float shootSpeed = 2f;
         private int shootTimer = 0;
@@ -37,9 +39,12 @@ namespace Journey_Of_The_Ship
         private int frameCounter = 0;
         private int explosionCounter = 0;
         private int turretNumber = 0;
-        private bool canMove = false;
+        private int immunityCounter = 0;
+        private int stunTimer = 0;
         private bool dying = false;
         private Rectangle animationRect;
+        private bool[] abilityActive = new bool[1];
+        private int[] abilityDurations = new int[1];
 
         private int dashTimer = 0;
         private int dashCooldown = 0;
@@ -65,35 +70,39 @@ namespace Journey_Of_The_Ship
         {
             if (shootTimer > 0)
                 shootTimer--;
+            if (immunityCounter > 0)
+                immunityCounter--;
+            if (stunTimer > 0)
+                stunTimer--;
 
             AnimateShip();
+            HandleAbilities();
             HandleAfterImages();
             CollisionBody[] bodiesArray = Main.activeEntities.ToArray();
             DetectCollisions(bodiesArray.ToList());
             CollisionBody[] projectilesArray = Main.activeProjectiles.ToArray();
             DetectCollisions(projectilesArray.ToList());
             Vector2 velocity = Vector2.Zero;
-            canMove = !dying;
 
-            if (canMove)
+            if (canMove && stunTimer <= 0)
             {
                 KeyboardState keyboardState = Keyboard.GetState();
                 if (keyboardState.IsKeyDown(Keys.W) && position.Y > 0)
                 {
-                    velocity.Y -= MoveSpeed;
+                    velocity.Y -= Main.playerSpeed;
                 }
                 if (keyboardState.IsKeyDown(Keys.A) && position.X > 0)
                 {
-                    velocity.X -= MoveSpeed;
+                    velocity.X -= Main.playerSpeed;
                     dashKeyPressTimers[0] = DashDetectionTime;
                 }
                 if (keyboardState.IsKeyDown(Keys.S) && position.Y < Main.desiredResolutionHeight - hitbox.Height)
                 {
-                    velocity.Y += MoveSpeed;
+                    velocity.Y += Main.playerSpeed;
                 }
                 if (keyboardState.IsKeyDown(Keys.D) && position.X < Main.desiredResolutionWidth - hitbox.Width)
                 {
-                    velocity.X += MoveSpeed;
+                    velocity.X += Main.playerSpeed;
                     dashKeyPressTimers[1] = DashDetectionTime;
                 }
                 if (keyboardState.IsKeyDown(Keys.Space) && shootTimer <= 0)
@@ -106,7 +115,7 @@ namespace Journey_Of_The_Ship
             if (dashTimer > 0)
             {
                 dashTimer--;
-                velocity = new Vector2(MoveSpeed * 3f * dashDirection, 0f);
+                velocity = new Vector2(Main.playerSpeed * 3f * dashDirection, 0f);
             }
 
             position += velocity;
@@ -116,6 +125,7 @@ namespace Journey_Of_The_Ship
             if (dying)
             {
                 explosionCounter++;
+                canMove = false;
                 if (explosionCounter % 10 == 0)
                 {
                     if (explosionCounter >= 5 * 60)
@@ -147,6 +157,14 @@ namespace Journey_Of_The_Ship
         private void Shoot()
         {
             Vector2 shootPos = position;
+
+            if (abilityActive[RapidFireAbility])
+            {
+                shootTimer += 3;
+                Main.StartScreenShake(1, 1);
+                Bullet.NewBullet(shootPos + centerTurretOffset, new Vector2(0f, -shootSpeed), true);
+                return;
+            }
             switch (shootLevel)
             {
                 case 1:
@@ -219,28 +237,37 @@ namespace Journey_Of_The_Ship
             }
             if (dashTimer <= 0 && dashCooldown <= 0 && dashKeyCanPressAgain[0] && dashKeyPressTimers[0] > 0 && keyboardState.IsKeyDown(Keys.A))
             {
+                immunityCounter += DashDurationTime;
                 dashTimer += DashDurationTime;
                 dashDirection = -1;
                 dashKeyPressTimers[0] = 0;
                 dashKeyCanPressAgain[0] = false;
                 dashCooldown = DashCooldownTime;
+                dashSound.Play();
             }
             if (dashTimer <= 0 && dashCooldown <= 0 && dashKeyCanPressAgain[1] && dashKeyPressTimers[1] > 0 && keyboardState.IsKeyDown(Keys.D))
             {
+                immunityCounter += DashDurationTime;
                 dashTimer += DashDurationTime;
                 dashDirection = 1;
                 dashKeyPressTimers[1] = 0;
                 dashKeyCanPressAgain[1] = false;
                 dashCooldown = DashCooldownTime;
+                dashSound.Play();
             }
+        }
+
+        public void AddAfterImage(float startingAlpha, Vector2 position)
+        {
+            afterImageAlpha.Add(startingAlpha);
+            afterImagePositions.Add(position);
         }
 
         private void HandleAfterImages()
         {
             if (dashTimer > 0 && dashTimer % 2 == 0)
             {
-                afterImageAlpha.Add(0.8f);
-                afterImagePositions.Add(position);
+                AddAfterImage(0.8f, position);
             }
 
             if (afterImageAlpha.Count > 0)
@@ -266,43 +293,99 @@ namespace Journey_Of_The_Ship
             }
         }
 
-        public override void HandleCollisions(CollisionBody collider, CollisionType colliderType)
+        private void HandleAbilities()
         {
-            //if (collisionType == CollisionType.PowerUp)
+            for (int i = 0; i < abilityActive.Length; i++)
             {
-                if (collider is PowerUp)
+                if (abilityActive[i])
                 {
-                    PowerUp powerUp = collider as PowerUp;
-                    if (powerUp.powerUpType == PowerUp.Attack)
+                    abilityDurations[i]--;
+                    if (abilityDurations[i] <= 0)
                     {
-                        shootLevel += 1;
-                        powerUp.DestoryInstance(powerUp);
+                        abilityActive[i] = false;
                     }
                 }
             }
-            //if (colliderType == CollisionType.Projectiles)
+        }
+
+        public override void HandleCollisions(CollisionBody collider, CollisionType colliderType)
+        {
+            if (collider is PowerUp)
             {
-                if (collider is Projectile)
+                PowerUp powerUp = collider as PowerUp;
+                switch (powerUp.powerUpType)
                 {
-                    Projectile collidingProjectile = collider as Projectile;
-                    if (!collidingProjectile.friendly)
+                    case PowerUp.Attack:
+                        shootLevel += 1;
+                        break;
+                    case PowerUp.Health:
+                        if (Main.playerHealth < 6)
+                        {
+                            Main.playerHealth += 1;
+                        }
+                        break;
+                    case PowerUp.Speed:
+                        Main.playerSpeed += 0.2f;
+                        break;
+                }
+                powerUp.DestoryInstance(powerUp);
+            }
+            if (collider is AbilityDrop)
+            {
+                AbilityDrop abilityDrop = collider as AbilityDrop;
+                switch (abilityDrop.abilityType)
+                {
+                    case AbilityDrop.RapidFire:
+                        abilityActive[RapidFireAbility] = true;
+                        abilityDurations[RapidFireAbility] = 30 * 60;
+                        break;
+                }
+                abilityDrop.DestoryInstance(abilityDrop);
+            }
+
+            if (immunityCounter > 0)
+                return;
+
+            if (collider is Projectile)
+            {
+                Projectile collidingProjectile = collider as Projectile;
+
+                if (collidingProjectile.friendly)
+                    return;
+
+                if (!collidingProjectile.continuous)
+                {
+                    immunityCounter += 30;
+                    Main.playerHealth -= 1;
+                    if (Main.playerHealth <= 0)
                     {
+                        dying = true;
+                    }
+                    Explosion.NewExplosion(collidingProjectile.position, Vector2.Zero);
+                    collidingProjectile.DestroyInstance(collidingProjectile);
+                }
+                if (collidingProjectile.continuous)
+                {
+                    if (collidingProjectile is ContinuousLaser)
+                    {
+                        immunityCounter += 30;
                         Main.playerHealth -= 1;
                         if (Main.playerHealth <= 0)
                         {
                             dying = true;
                         }
-                        Explosion.NewExplosion(collidingProjectile.position, Vector2.Zero);
-                        collidingProjectile.DestroyInstance(collidingProjectile);
+                        Explosion.NewExplosion(position, Vector2.Zero);
+                    }
+                    if (collidingProjectile is StasisBeam)
+                    {
+                        stunTimer = 2;
                     }
                 }
             }
-            //if (colliderType == CollisionType.Enemies)
+            if (collider is Slicer)
             {
-                if (collider is Slicer)
-                {
-                    Main.playerHealth -= 1;
-                }
+                immunityCounter += 30;
+                Main.playerHealth -= 1;
             }
         }
 

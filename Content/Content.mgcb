@@ -20,6 +20,12 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/MainFont.spritefont
 
+#begin Sounds/Dash.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Dash.wav
+
 #begin Sounds/Explosion_3.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -32,11 +38,23 @@
 /processorParam:Quality=Best
 /build:Sounds/MiscEffect_1.wav
 
+#begin Sounds/Music/JotS_Title.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Sounds/Music/JotS_Title.mp3
+
 #begin Sounds/PlayerShoot.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:Sounds/PlayerShoot.wav
+
+#begin Sounds/StasisBeam.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/StasisBeam.wav
 
 #begin Sounds/UFODying.wav
 /importer:WavImporter
@@ -158,6 +176,30 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/Gore/Gore_1.png
 
+#begin Textures/Objects/Gore/Gore_10.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/Gore/Gore_10.png
+
+#begin Textures/Objects/Gore/Gore_11.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/Gore/Gore_11.png
+
 #begin Textures/Objects/Gore/Gore_2.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -217,6 +259,42 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/Gore/Gore_6.png
+
+#begin Textures/Objects/Gore/Gore_7.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/Gore/Gore_7.png
+
+#begin Textures/Objects/Gore/Gore_8.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/Gore/Gore_8.png
+
+#begin Textures/Objects/Gore/Gore_9.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/Gore/Gore_9.png
 
 #begin Textures/Objects/Laser.png
 /importer:TextureImporter
@@ -290,6 +368,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/PlayerAfterImage.png
 
+#begin Textures/Objects/Power-Ups/AbilityRect.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/Power-Ups/AbilityRect.png
+
 #begin Textures/Objects/Power-Ups/AttackUp.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -302,7 +392,7 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/Power-Ups/AttackUp.png
 
-#begin Textures/Objects/Power-Ups/RedAura.png
+#begin Textures/Objects/Power-Ups/HealthUp.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -312,9 +402,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Objects/Power-Ups/RedAura.png
+/build:Textures/Objects/Power-Ups/HealthUp.png
 
-#begin Textures/Objects/Power-Ups/RedRing.png
+#begin Textures/Objects/Power-Ups/PowerUpAura.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -324,7 +414,43 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Objects/Power-Ups/RedRing.png
+/build:Textures/Objects/Power-Ups/PowerUpAura.png
+
+#begin Textures/Objects/Power-Ups/PowerUpRing.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/Power-Ups/PowerUpRing.png
+
+#begin Textures/Objects/Power-Ups/RapidFire.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/Power-Ups/RapidFire.png
+
+#begin Textures/Objects/Power-Ups/SpeedUp.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/Power-Ups/SpeedUp.png
 
 #begin Textures/Objects/SlicerAfterImage.png
 /importer:TextureImporter
@@ -374,6 +500,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/WhitePixel.png
 
+#begin Textures/Spritesheets/ContinuousLaser.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Spritesheets/ContinuousLaser.png
+
 #begin Textures/Spritesheets/Explosion.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -398,6 +536,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Spritesheets/PlayerShip.png
 
+#begin Textures/Spritesheets/Ray.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Spritesheets/Ray.png
+
 #begin Textures/Spritesheets/Slicer.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -409,6 +559,30 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Spritesheets/Slicer.png
+
+#begin Textures/Spritesheets/Stasis.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Spritesheets/Stasis.png
+
+#begin Textures/Spritesheets/StasisBeam.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Spritesheets/StasisBeam.png
 
 #begin Textures/Spritesheets/UFO.png
 /importer:TextureImporter
@@ -458,6 +632,30 @@
 /processorParam:TextureFormat=Color
 /build:Textures/UI/AsteroidFieldWarningMark.png
 
+#begin Textures/UI/ButtonOutlineBottom.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/UI/ButtonOutlineBottom.png
+
+#begin Textures/UI/ButtonOutlineTop.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/UI/ButtonOutlineTop.png
+
 #begin Textures/UI/ClearEnvironmentIcon.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -493,4 +691,40 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/UI/HealthBarOutlines.png
+
+#begin Textures/UI/ScreenFadeOut.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/UI/ScreenFadeOut.png
+
+#begin Textures/UI/SettingsPanel.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/UI/SettingsPanel.png
+
+#begin Textures/UI/SliderButton.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/UI/SliderButton.png
 

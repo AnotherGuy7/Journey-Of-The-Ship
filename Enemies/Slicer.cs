@@ -91,7 +91,8 @@ namespace Journey_Of_The_Ship.Enemies
 
             if (health <= 0)
             {
-                SpawnGore(Main.random.Next(4, 5 + 1), SlicerWidth, SlicerHeight, 3);
+                DropPowerUp(1, new Vector2(SlicerWidth / 2f, SlicerHeight / 2f));
+                SpawnGore(Main.random.Next(4, 5 + 1), SlicerWidth, SlicerHeight, Main.random.Next(1, 2 + 1));
                 GenerateSmoke(Color.Orange, Color.Gray, SlicerWidth, SlicerHeight, 16);
                 DestroyInstance(this);
             }

@@ -83,9 +83,10 @@ namespace Journey_Of_The_Ship.Enemies
                 deathTimer++;
                 if (deathTimer >= 80)
                 {
+                    DropAbilities(100, new Vector2(UFOWidth / 2f, UFOHeight / 2f));
+                    DropPowerUp(8, new Vector2(UFOWidth / 2f, UFOHeight / 2f));
                     SpawnGore(Main.random.Next(0, 1 + 1), UFOWidth, UFOHeight, 4);
                     Explosion.NewExplosion(position + new Vector2(UFOWidth / 2f, UFOHeight / 2f), Vector2.Zero);
-                    PowerUps.PowerUp.NewPowerUp(PowerUps.PowerUp.Attack, position + new Vector2(UFOWidth / 2f, UFOHeight / 2f), new Vector2(0f, 0.3f), 15);
                     Main.StartScreenShake(8, 1);
                     DestroyInstance(this);
                 }

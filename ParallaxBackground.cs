@@ -19,7 +19,7 @@ namespace Journey_Of_The_Ship
         {
             parallaxBackgrounds = spaceSet1;
             backgroundPosition = new Vector2(-5f, -5f);
-            secondBackgroundPosition = new Vector2(-5f, 1f + parallaxBackgrounds[1].Height);
+            secondBackgroundPosition = new Vector2(-5f, -5f - parallaxBackgrounds[1].Height);
         }
 
         public void Update()
@@ -27,11 +27,11 @@ namespace Journey_Of_The_Ship
             backgroundPosition.Y += parallaxStrength;
             secondBackgroundPosition.Y += parallaxStrength;
 
-            if (backgroundPosition.Y > parallaxBackgrounds[0].Height)
+            if (backgroundPosition.Y > parallaxBackgrounds[0].Height + 5f)
             {
                 backgroundPosition = new Vector2(-5f, -5f - parallaxBackgrounds[0].Height);
             }
-            if (secondBackgroundPosition.Y > parallaxBackgrounds[1].Height)
+            if (secondBackgroundPosition.Y > parallaxBackgrounds[1].Height + 5f)
             {
                 secondBackgroundPosition = new Vector2(-5f, -5f - parallaxBackgrounds[1].Height);
             }

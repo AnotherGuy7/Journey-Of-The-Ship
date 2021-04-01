@@ -34,15 +34,25 @@ namespace Journey_Of_The_Ship
         private Matrix screenMatrix;
 
         public static Player player;
+        public static AnimationHandler animationHandler;
+        public static SaveManager saveManager;
         public PlayerUI playerUI;
+        public TitleScreen titleScreen;
 
         public static int playerHealth = 6;
+        public static float playerSpeed = 1.5f;
         public static int gameDifficulty = 1;
         public static int gameScore = 1;
         public static int screenShakeDuration = 0;
         public static int screenShakeIntensity = 0;
+        public static float fadeProgress = 0f;
+        public static int fadeOutTimer = 0;
+        public static int fadeInTimer = 0;
+        public static int fadeOutStartTime = 0;
+        public static int fadeInStartTime = 0;
+        public static int uiInteractionLayer = 1;
 
-        public static GameStates gameState = GameStates.GameState_Playing;
+        public static GameStates gameState = GameStates.GameState_Title;
         public static Events activeEvent = Events.None;
 
         public static int desiredResolutionWidth = 167;     //The resolution that the game will actually use, or "screen-space"
@@ -53,8 +63,17 @@ namespace Journey_Of_The_Ship
         public static float soundEffectVolume = 0.8f;
         public static float musicVolume = 0.8f;
 
+        public static Vector2 mousePosition;
+        public static MouseState mouseState;
+        public static bool closeGame = false;
+
+        private int eventTimer = 0;
+
+        private Texture2D fadeOutTexture;
         private ParallaxBackground parallax;
         private Vector2 screenOffset;
+
+        public static string debugValue = "";
 
         public enum GameStates
         {
@@ -92,16 +111,20 @@ namespace Journey_Of_The_Ship
             screenMatrix = Matrix.CreateScale(matrixX, matrixY, 1.0f);
 
             LoadContent();
-            ReInitializeGame();
 
+            titleScreen = new TitleScreen();
             parallax = new ParallaxBackground();
+            saveManager = new SaveManager();
             PlayerUI.InitializePlayerUI();
+            saveManager.LoadGame();
         }
 
         protected override void LoadContent()
         {
+            animationHandler = new AnimationHandler();
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             mainFont = Content.Load<SpriteFont>("Fonts/MainFont");
+            fadeOutTexture = Content.Load<Texture2D>("Textures/UI/ScreenFadeOut");
 
             Player.playerSpritesheet = Content.Load<Texture2D>("Textures/Spritesheets/PlayerShip");
             Player.playerAfterImageTexture = Content.Load<Texture2D>("Textures/Objects/PlayerAfterImage");
@@ -110,6 +133,10 @@ namespace Journey_Of_The_Ship
             UFO.ufoSpritesheet = Content.Load<Texture2D>("Textures/Spritesheets/UFO");
             Slicer.slicerSpritesheet = Content.Load<Texture2D>("Textures/Spritesheets/Slicer");
             Slicer.slicerAfterImageTexture = Content.Load<Texture2D>("Textures/Objects/SlicerAfterImage");
+            RayEnemy.raySpritesheet = Content.Load<Texture2D>("Textures/Spritesheets/Ray");
+            Stasis.stabilizerSpritesheet = Content.Load<Texture2D>("Textures/Spritesheets/Stasis");
+            ContinuousLaser.laserSpritesheet = Content.Load<Texture2D>("Textures/Spritesheets/ContinuousLaser");
+            StasisBeam.beamSpritesheet = Content.Load<Texture2D>("Textures/Spritesheets/StasisBeam");
 
             int amountOfAsteroids = 5;
             Asteroid.asteroidTextures = new Texture2D[amountOfAsteroids];
@@ -125,7 +152,7 @@ namespace Journey_Of_The_Ship
                 Planet.planetsTextureArray[p] = Content.Load<Texture2D>("Textures/Objects/Planet_" + (p + 1));
             }
 
-            int amountOfGoreTextures = 6;
+            int amountOfGoreTextures = 11;
             Gore.goreTextures = new Texture2D[amountOfGoreTextures];
             for (int g = 0; g < amountOfGoreTextures; g++)
             {
@@ -135,8 +162,13 @@ namespace Journey_Of_The_Ship
             Star.starSpritesheet = Content.Load<Texture2D>("Textures/Objects/Star");
             Explosion.explosionSpritesheet = Content.Load<Texture2D>("Textures/Spritesheets/Explosion");
             Smoke.whitePixelTexture = Content.Load<Texture2D>("Textures/Objects/WhitePixel");
-            PowerUp.powerUpTextures[0] = Content.Load<Texture2D>("Textures/Objects/Power-Ups/AttackUp");
-            PowerUp.powerUpAuras[0] = Content.Load<Texture2D>("Textures/Objects/Power-Ups/RedAura");
+            PowerUp.powerUpAura = Content.Load<Texture2D>("Textures/Objects/Power-Ups/PowerUpAura");
+            PowerUp.powerUpRing = Content.Load<Texture2D>("Textures/Objects/Power-Ups/PowerUpRing");
+            PowerUp.powerUpTextures[PowerUp.Attack] = Content.Load<Texture2D>("Textures/Objects/Power-Ups/AttackUp");
+            PowerUp.powerUpTextures[PowerUp.Health] = Content.Load<Texture2D>("Textures/Objects/Power-Ups/HealthUp");
+            PowerUp.powerUpTextures[PowerUp.Speed] = Content.Load<Texture2D>("Textures/Objects/Power-Ups/SpeedUp");
+            AbilityDrop.abilityRect = Content.Load<Texture2D>("Textures/Objects/Power-Ups/AbilityRect");
+            AbilityDrop.abilityTextures[AbilityDrop.RapidFire] = Content.Load<Texture2D>("Textures/Objects/Power-Ups/RapidFire");
 
             ParallaxBackground.spaceSet1 = new Texture2D[2];
             ParallaxBackground.spaceSet1[0] = Content.Load<Texture2D>("Textures/Backgrounds/SpaceBackgroundSet1/Space1_Part1");
@@ -148,43 +180,71 @@ namespace Journey_Of_The_Ship
             PlayerUI.asteroidEnvironmentIcon = Content.Load<Texture2D>("Textures/UI/AsteroidEnvironmentIcon");
             WarningOverlay.warningOverlayTexture = Content.Load<Texture2D>("Textures/UI/AsteroidFieldWarningLines");
             WarningOverlay.warningOverlayMark = Content.Load<Texture2D>("Textures/UI/AsteroidFieldWarningMark");
+            Button.menuStyleTop = Content.Load<Texture2D>("Textures/UI/ButtonOutlineTop");
+            Button.menuStyleBottom = Content.Load<Texture2D>("Textures/UI/ButtonOutlineBottom");
+            Color[] whiteColorArray = new Color[1] { Color.White } ;
+            Texture2D whitePixel = new Texture2D(GraphicsDevice, 1, 1);     //Me being too lazy to make a 1 pixel texture and loading it through Content.mgcb
+            whitePixel.SetData(whiteColorArray);
+            Slider.whitePixel = whitePixel;
+            Slider.sliderButtonTexture = Content.Load<Texture2D>("Textures/UI/SliderButton");
+            SettingsScreen.settingsPanel = Content.Load<Texture2D>("Textures/UI/SettingsPanel");
 
             Player.shootSound = Content.Load<SoundEffect>("Sounds/PlayerShoot");
+            Player.dashSound = Content.Load<SoundEffect>("Sounds//Dash");
             Explosion.explosionSound = Content.Load<SoundEffect>("Sounds/Explosion_3");
             UFO.shootSound = Content.Load<SoundEffect>("Sounds/UFOShoot");
             UFO.deathSound = Content.Load<SoundEffect>("Sounds/UFODying");
+            Stasis.beamSound = Content.Load<SoundEffect>("Sounds/StasisBeam");
         }
 
         protected override void Update(GameTime gameTime)
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+            debugValue = "";
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape) || closeGame)
             {
                 Exit();
             }
 
+            mouseState = Mouse.GetState();
+            mousePosition = mouseState.Position.ToVector2() / 3f;       //Divided by 3 cause it has to be converted into screen-space coordinates
+
+            if (fadeOutTimer > 0)
+            {
+                fadeOutTimer--;
+                fadeProgress = 1f - ((float)fadeOutTimer / (float)fadeOutStartTime);
+            }
+            if (fadeInTimer > 0)
+            {
+                fadeInTimer--;
+                fadeProgress = (float)fadeInTimer / (float)fadeInStartTime;
+            }
+
+            animationHandler.Update();
             switch (gameState)
             {
                 case GameStates.GameState_Title:
+                    parallax.Update();
+                    titleScreen.Update();
                     break;
                 case GameStates.GameState_Playing:
                     parallax.Update();
 
                     VisualEffect[] backgroundEffectsClone = backgroundEffects.ToArray();        //This is so that when the active list changes, the loop isn't affected
-                    CollisionBody[] activeEntitiesClone = activeEntities.ToArray();
                     Projectile[] activeProjectilesClone = activeProjectiles.ToArray();
+                    CollisionBody[] activeEntitiesClone = activeEntities.ToArray();
                     VisualEffect[] activeEffectsClone = activeEffects.ToArray();
                     UIObject[] activeUIClone = activeUI.ToArray();
                     foreach (VisualEffect backgroundEffect in backgroundEffectsClone)
                     {
                         backgroundEffect.Update();
                     }
-                    foreach (CollisionBody entity in activeEntitiesClone)
-                    {
-                        entity.Update();
-                    }
                     foreach (Projectile projectile in activeProjectilesClone)
                     {
                         projectile.Update();
+                    }
+                    foreach (CollisionBody entity in activeEntitiesClone)
+                    {
+                        entity.Update();
                     }
                     foreach (VisualEffect effect in activeEffectsClone)
                     {
@@ -195,6 +255,7 @@ namespace Journey_Of_The_Ship
                         ui.Update();
                     }
 
+                    HandleEvents();
                     CheckForEvents();
                     SpawnBackgroundEffects();
                     SpawnEnemies();
@@ -235,26 +296,28 @@ namespace Journey_Of_The_Ship
             switch (gameState)
             {
                 case GameStates.GameState_Title:
+                    parallax.Draw(_spriteBatch);
+                    titleScreen.Draw(_spriteBatch);
                     break;
                 case GameStates.GameState_Playing:
                     parallax.Draw(_spriteBatch);
 
                     VisualEffect[] backgroundEffectsClone = backgroundEffects.ToArray();
-                    CollisionBody[] activeEntitiesClone = activeEntities.ToArray();
                     Projectile[] activeProjectilesClone = activeProjectiles.ToArray();
+                    CollisionBody[] activeEntitiesClone = activeEntities.ToArray();
                     VisualEffect[] activeEffectsClone = activeEffects.ToArray();
                     UIObject[] activeUIClone = activeUI.ToArray();
                     foreach (VisualEffect backgroundEffect in backgroundEffectsClone)
                     {
                         backgroundEffect.Draw(_spriteBatch);
                     }
-                    foreach (CollisionBody entity in activeEntitiesClone)
-                    {
-                        entity.Draw(_spriteBatch);
-                    }
                     foreach (Projectile projectile in activeProjectilesClone)
                     {
                         projectile.Draw(_spriteBatch);
+                    }
+                    foreach (CollisionBody entity in activeEntitiesClone)
+                    {
+                        entity.Draw(_spriteBatch);
                     }
                     foreach (VisualEffect effect in activeEffectsClone)
                     {
@@ -274,20 +337,43 @@ namespace Journey_Of_The_Ship
                     break;
             }
 
+            if (fadeProgress > 0)
+            {
+                _spriteBatch.Draw(fadeOutTexture, new Rectangle(0, 0, desiredResolutionWidth, desiredResolutionHeight), Color.White * fadeProgress);
+            }
+            if (debugValue != "")
+            {
+                Vector2 position = new Vector2(desiredResolutionWidth, desiredResolutionHeight) - (mainFont.MeasureString(debugValue) * 0.4f);
+                _spriteBatch.DrawString(mainFont, debugValue, position, Color.White, 0f, Vector2.Zero, 0.4f, SpriteEffects.None, 0f);
+            }
             _spriteBatch.End();
 
         }
 
-        private void ReInitializeGame()
+        public static void FadeIn(int duration)
+        {
+            fadeInStartTime = duration;
+            fadeInTimer = duration;
+        }
+
+        public static void FadeOut(int duration)
+        {
+            fadeOutStartTime = duration;
+            fadeOutTimer = duration;
+        }
+
+        public static void ReInitializeGame()
         {
             player.Initialize();
-            player.position.X = 167f / 2f;
+            player.position.X = desiredResolutionWidth / 2f;
             player.position.Y = 180f;
             activeEntities.Add(player);
 
             playerHealth = 6;
             gameDifficulty = 1;
             gameScore = 1;
+            gameState = GameStates.GameState_Playing;
+
 
             for (int star = 0; star < 20; star++)
             {
@@ -296,6 +382,11 @@ namespace Journey_Of_The_Ship
                 float starFallSpeed = (float)random.NextDouble() * 0.5f;
                 Star.NewStarEffect(new Vector2(starSpawnPosX, starSpawnPosY), new Vector2(0f, starFallSpeed), 0f, random.Next(0, 2));
             }
+        }
+
+        public static void CloseGame()
+        {
+            closeGame = true;
         }
 
         public static void StartScreenShake(int duration, int intensity)
@@ -322,22 +413,46 @@ namespace Journey_Of_The_Ship
             }
         }
 
+        private void HandleEvents()
+        {
+            if (activeEvent != Events.None)
+            {
+                eventTimer++;
+                if (activeEvent == Events.AsteroidField && eventTimer >= 40 * 60)
+                {
+                    activeEvent = Events.None;
+                }
+            }
+        }
+
         private void SpawnEnemies()
         {
             switch (activeEvent)
             {
                 case Events.None:
-                    if (random.Next(1, 250) == 1)
+                    if (random.Next(1, 300) == 1)
                     {
                         float spawnPosX = random.Next(25, desiredResolutionWidth - 25);
                         float spawnPosY = -50;
                         UFO.NewUFO(new Vector2(spawnPosX, spawnPosY));
                     }
-                    if (random.Next(1, 320) == 1)
+                    if (random.Next(1, 380) == 1)
                     {
                         float spawnPosX = random.Next(25, desiredResolutionWidth - 25);
                         float spawnPosY = -50;
                         Slicer.NewSlicer(new Vector2(spawnPosX, spawnPosY));
+                    }
+                    if (random.Next(1, 520) == 1)
+                    {
+                        float spawnPosX = random.Next(8, desiredResolutionWidth - 8);
+                        float spawnPosY = -50;
+                        RayEnemy.NewRay(new Vector2(spawnPosX, spawnPosY));
+                    }
+                    if (random.Next(1, 520) == 1)
+                    {
+                        float spawnPosX = random.Next(16, desiredResolutionWidth - 16);
+                        float spawnPosY = -50;
+                        Stasis.NewStasis(new Vector2(spawnPosX, spawnPosY));
                     }
                     break;
                 case Events.AsteroidField:
