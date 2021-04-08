@@ -36,8 +36,9 @@ namespace Journey_Of_The_Ship
         public static Player player;
         public static AnimationHandler animationHandler;
         public static SaveManager saveManager;
+        public static MusicManager musicManager;
+        public static UIObject mainUI;     //The UI that is currently being shown to the player (that they can interact with. Title Screen, Modification Screen, etc.)
         public PlayerUI playerUI;
-        public TitleScreen titleScreen;
 
         public static int playerHealth = 6;
         public static float playerSpeed = 1.5f;
@@ -112,9 +113,10 @@ namespace Journey_Of_The_Ship
 
             LoadContent();
 
-            titleScreen = new TitleScreen();
+            mainUI = new TitleScreen();
             parallax = new ParallaxBackground();
             saveManager = new SaveManager();
+            musicManager = new MusicManager();
             PlayerUI.InitializePlayerUI();
             saveManager.LoadGame();
         }
@@ -185,9 +187,16 @@ namespace Journey_Of_The_Ship
             Color[] whiteColorArray = new Color[1] { Color.White } ;
             Texture2D whitePixel = new Texture2D(GraphicsDevice, 1, 1);     //Me being too lazy to make a 1 pixel texture and loading it through Content.mgcb
             whitePixel.SetData(whiteColorArray);
-            Slider.whitePixel = whitePixel;
+            Button.whitePixel = Slider.whitePixel = whitePixel;
             Slider.sliderButtonTexture = Content.Load<Texture2D>("Textures/UI/SliderButton");
             SettingsScreen.settingsPanel = Content.Load<Texture2D>("Textures/UI/SettingsPanel");
+            ModificationScreen.normalBarrelTexture = Content.Load<Texture2D>("Textures/Objects/Icons/NormalBarrel");
+            ModificationScreen.extendedBarrelTexture = Content.Load<Texture2D>("Textures/Objects/Icons/ExtendedBarrel");
+            ModificationScreen.powerfulBarrelTexture = Content.Load<Texture2D>("Textures/Objects/Icons/PowerfulBarrel");
+            ModificationScreen.shipTexture = Content.Load<Texture2D>("Textures/Objects/Icons/Ship");
+            ModificationScreen.shipBarrels = Content.Load<Texture2D>("Textures/Objects/Icons/ShipBarrels");
+            ModificationScreen.shipPropellers = Content.Load<Texture2D>("Textures/Objects/Icons/ShipPropellers");
+            ModificationScreen.shipWings = Content.Load<Texture2D>("Textures/Objects/Icons/ShipWings");
 
             Player.shootSound = Content.Load<SoundEffect>("Sounds/PlayerShoot");
             Player.dashSound = Content.Load<SoundEffect>("Sounds//Dash");
@@ -195,6 +204,8 @@ namespace Journey_Of_The_Ship
             UFO.shootSound = Content.Load<SoundEffect>("Sounds/UFOShoot");
             UFO.deathSound = Content.Load<SoundEffect>("Sounds/UFODying");
             Stasis.beamSound = Content.Load<SoundEffect>("Sounds/StasisBeam");
+            MusicManager.titleMusic = Content.Load<Song>("Sounds/Music/JotS_Title");
+            MusicManager.mainMusic = Content.Load<Song>("Sounds/Music/JotS_Main");
         }
 
         protected override void Update(GameTime gameTime)
@@ -220,11 +231,12 @@ namespace Journey_Of_The_Ship
             }
 
             animationHandler.Update();
+            musicManager.UpdateMusic();
             switch (gameState)
             {
                 case GameStates.GameState_Title:
                     parallax.Update();
-                    titleScreen.Update();
+                    mainUI.Update();
                     break;
                 case GameStates.GameState_Playing:
                     parallax.Update();
@@ -297,7 +309,7 @@ namespace Journey_Of_The_Ship
             {
                 case GameStates.GameState_Title:
                     parallax.Draw(_spriteBatch);
-                    titleScreen.Draw(_spriteBatch);
+                    mainUI.Draw(_spriteBatch);
                     break;
                 case GameStates.GameState_Playing:
                     parallax.Draw(_spriteBatch);

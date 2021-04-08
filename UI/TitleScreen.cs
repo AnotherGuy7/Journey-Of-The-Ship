@@ -7,6 +7,8 @@ namespace Journey_Of_The_Ship.UI
     public class TitleScreen : UIObject
     {
         private SettingsScreen settingsScreen = new SettingsScreen();
+        private ModificationScreen modificationScreen = new ModificationScreen();
+
         private Button startButton = new Button("Start", new Vector2(84f, 100f), Color.White, Color.LightYellow);
         private Button settingsButton = new Button("Settings", new Vector2(84f, 130f), Color.White, Color.LightYellow);
         private Button quitButton = new Button("Quit", new Vector2(84f, 160f), Color.White, Color.Red);
@@ -20,7 +22,7 @@ namespace Journey_Of_The_Ship.UI
         public static void InitializeTitleScreen()
         {
             TitleScreen newInstance = new TitleScreen();
-            Main.activeUI.Add(newInstance);
+            Main.mainUI = newInstance;
         }
 
         public override void Update()
@@ -44,7 +46,9 @@ namespace Journey_Of_The_Ship.UI
                 if (gameStartTimer > 100)
                 {
                     gameStartTimer = 0;
-                    AnimationHandler.PlayGameEntryAnimation();
+                    Main.FadeIn(100);
+                    ModificationScreen.InitializeModificationScreen();
+                    DestroyInstance(this);
                 }
             }
 
