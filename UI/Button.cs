@@ -15,12 +15,14 @@ namespace Journey_Of_The_Ship.UI
 
         public Texture2D buttonIcon;
         public Rectangle buttonRect;
+        public Vector2 buttonPosition;
         public Color drawColor;
         public ButtonStyle buttonStyle = ButtonStyle.MainMenu;
         public bool buttonHoveredOver = false;
         public bool buttonPressed = false;
         public float scale = 0.6f;
         public string stringText;
+        public bool visible = true;
 
         private Vector2 textSize;
         private Color inactiveButtonColor;
@@ -28,6 +30,9 @@ namespace Journey_Of_The_Ship.UI
         private Vector2 textOutlineOffset;
         private int interactionLayer;
 
+        /// <summary>
+        /// A button with partial borders around it.
+        /// </summary>
         public Button(string text, Vector2 position, Color inactiveColor, Color activeColor, int buttonInteractionLayer = 1)
         {
             stringText = text;
@@ -35,28 +40,37 @@ namespace Journey_Of_The_Ship.UI
             int width = (int)(textSize.X * scale);
             int height = (int)(textSize.Y * scale);
             buttonRect = new Rectangle((int)position.X - (width / 2), (int)position.Y - (height / 2), width, height);
+            buttonPosition = new Vector2(buttonRect.X, buttonRect.Y);
             inactiveButtonColor = inactiveColor;
             activeButtonColor = activeColor;
             buttonStyle = ButtonStyle.MainMenu;
             interactionLayer = buttonInteractionLayer;
         }
 
+        /// <summary>
+        /// A button with text and an icon. Outlined with white borders.
+        /// </summary>
         public Button(Texture2D texture, string text, int width, int height, Vector2 position, Color inactiveColor, Color activeColor, int buttonInteractionLayer = 1)
         {
             buttonIcon = texture;
             stringText = text;
             textSize = Main.mainFont.MeasureString(text);
             buttonRect = new Rectangle((int)position.X - (width / 2), (int)position.Y - (height / 2), width, height);
+            buttonPosition = new Vector2(buttonRect.X, buttonRect.Y);
             inactiveButtonColor = inactiveColor;
             activeButtonColor = activeColor;
             buttonStyle = ButtonStyle.ButtonWithIcon;
             interactionLayer = buttonInteractionLayer;
         }
 
+        /// <summary>
+        /// A button with only an icon. Outlined with white borders.
+        /// </summary>
         public Button(Texture2D texture, Vector2 position, Color inactiveColor, Color activeColor, float buttonScale = 1f, int buttonInteractionLayer = 1)
         {
             buttonIcon = texture;
             buttonRect = new Rectangle((int)position.X, (int)position.Y, texture.Width, texture.Height);
+            buttonPosition = new Vector2(buttonRect.X, buttonRect.Y);
             inactiveButtonColor = inactiveColor;
             activeButtonColor = activeColor;
             buttonStyle = ButtonStyle.IconOnly;
@@ -73,10 +87,15 @@ namespace Journey_Of_The_Ship.UI
 
         public override void Update()
         {
+            if (!visible)
+                return;
+
             scale = 0.6f;
             buttonPressed = false;
             buttonHoveredOver = false;
             drawColor = inactiveButtonColor;
+            buttonRect.X = (int)buttonPosition.X;
+            buttonRect.Y = (int)buttonPosition.Y;
             textOutlineOffset = new Vector2(buttonRect.Width / 1.8f, buttonRect.Height / 2f) * scale;
 
             if (Main.uiInteractionLayer != interactionLayer)
@@ -97,6 +116,9 @@ namespace Journey_Of_The_Ship.UI
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            if (!visible)
+                return;
+
             if (buttonStyle == ButtonStyle.MainMenu)
             {
                 Vector2 position = new Vector2(buttonRect.X, buttonRect.Y);
@@ -113,41 +135,55 @@ namespace Journey_Of_The_Ship.UI
             {
                 Vector2 buttonPosition = new Vector2(buttonRect.X, buttonRect.Y);
 
-                //Top line
-                Vector2 topLinePosition = buttonPosition + new Vector2(1f, 0f);
-                Vector2 topLineScale = new Vector2(buttonRect.Width - 2f, 1f);
-                spriteBatch.Draw(whitePixel, topLinePosition, null, drawColor, 0f, Vector2.Zero, topLineScale, SpriteEffects.None, 0f);
+                DrawBorderLines(spriteBatch, buttonPosition);
 
-                //Left line
-                Vector2 leftLinePosition = buttonPosition + new Vector2(0f, 1f);
-                Vector2 leftLineScale = new Vector2(1f, buttonRect.Height - 2f);
-                spriteBatch.Draw(whitePixel, leftLinePosition, null, drawColor, 0f, Vector2.Zero, leftLineScale, SpriteEffects.None, 0f);
+                Vector2 iconPosition = new Vector2(buttonRect.X + 3f, buttonRect.Y + 3f);
+                float iconScaleX = ((buttonRect.Width - 2f) * 0.4f) / buttonRect.Width;
+                float iconScaleY = (buttonRect.Height - 6f) / buttonIcon.Height;
+                Vector2 iconScale = new Vector2(iconScaleX, iconScaleY);
+                spriteBatch.Draw(buttonIcon, iconPosition, null, Color.White, 0f, Vector2.Zero, iconScale, SpriteEffects.None, 0f);
 
-                //Right line
-                Vector2 rightLinePosition = buttonPosition + new Vector2(buttonRect.Width - 1f, 1f);
-                Vector2 rightLineScale = new Vector2(1f, buttonRect.Height - 2f);
-                spriteBatch.Draw(whitePixel, rightLinePosition, null, drawColor, 0f, Vector2.Zero, rightLineScale, SpriteEffects.None, 0f);
-
-                //Left line
-                Vector2 bottomLinePosition = buttonPosition + new Vector2(1f, buttonRect.Height - 1f);
-                Vector2 bottomLineScale = new Vector2(buttonRect.Width - 2f, 1f);
-                spriteBatch.Draw(whitePixel, bottomLinePosition, null, drawColor, 0f, Vector2.Zero, bottomLineScale, SpriteEffects.None, 0f);
-
-                Vector2 iconPosition = new Vector2(buttonRect.X + 3f + 1f, buttonRect.Y + buttonRect.Height / 2f);
-                spriteBatch.Draw(buttonIcon, iconPosition, null, Color.White);
-
-                Vector2 textPosition = iconPosition + new Vector2(buttonIcon.Width + 3f, 0f);
-                spriteBatch.DrawString(Main.mainFont, stringText, textPosition, drawColor, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+                Vector2 textPosition = iconPosition + new Vector2((buttonIcon.Width * iconScaleX) + 3f, 0f);
+                float textScaleX = ((buttonRect.Width - 2f) * 0.6f) / buttonRect.Width;
+                float textScaleY = (buttonRect.Height - 8f) / textSize.Y;
+                Vector2 textScale = new Vector2(textScaleX, textScaleY); ;
+                spriteBatch.DrawString(Main.mainFont, stringText, textPosition, drawColor, 0f, Vector2.Zero, textScale, SpriteEffects.None, 0f);
+                //Main.debugValue = iconScale.ToString();
             }
             else if (buttonStyle == ButtonStyle.IconOnly)
             {
                 Vector2 buttonPosition = new Vector2(buttonRect.X, buttonRect.Y);
-                Vector2 buttonOrigin = new Vector2(buttonIcon.Width / 2f, buttonIcon.Height / 2f);
-                spriteBatch.Draw(buttonIcon, buttonPosition, null, drawColor, 0f, buttonOrigin, scale, SpriteEffects.None, 0f);
+
+                DrawBorderLines(spriteBatch, buttonPosition);
+
+                spriteBatch.Draw(buttonIcon, buttonPosition, null, drawColor, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
             }
 
             //Vector2 position2 = new Vector2(buttonRect.X, buttonRect.Y);
             //spriteBatch.DrawString(Main.mainFont, Main.mousePosition + "; " + buttonHoveredOver, position2, drawColor, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+        }
+
+        private void DrawBorderLines(SpriteBatch spriteBatch, Vector2 position)
+        {
+            //Top line
+            Vector2 topLinePosition = position + new Vector2(1f, 0f);
+            Vector2 topLineScale = new Vector2(buttonRect.Width - 2f, 1f);
+            spriteBatch.Draw(whitePixel, topLinePosition, null, drawColor, 0f, Vector2.Zero, topLineScale, SpriteEffects.None, 0f);
+
+            //Left line
+            Vector2 leftLinePosition = position + new Vector2(0f, 1f);
+            Vector2 leftLineScale = new Vector2(1f, buttonRect.Height - 2f);
+            spriteBatch.Draw(whitePixel, leftLinePosition, null, drawColor, 0f, Vector2.Zero, leftLineScale, SpriteEffects.None, 0f);
+
+            //Right line
+            Vector2 rightLinePosition = position + new Vector2(buttonRect.Width - 1f, 1f);
+            Vector2 rightLineScale = new Vector2(1f, buttonRect.Height - 2f);
+            spriteBatch.Draw(whitePixel, rightLinePosition, null, drawColor, 0f, Vector2.Zero, rightLineScale, SpriteEffects.None, 0f);
+
+            //Left line
+            Vector2 bottomLinePosition = position + new Vector2(1f, buttonRect.Height - 1f);
+            Vector2 bottomLineScale = new Vector2(buttonRect.Width - 2f, 1f);
+            spriteBatch.Draw(whitePixel, bottomLinePosition, null, drawColor, 0f, Vector2.Zero, bottomLineScale, SpriteEffects.None, 0f);
         }
     }
 }

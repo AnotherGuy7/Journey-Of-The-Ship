@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -20,6 +21,10 @@ namespace Journey_Of_The_Ship
         public static Texture2D playerAfterImageTexture;
         public static SoundEffect shootSound;
         public static SoundEffect dashSound;
+        public static TurretTypes turretType = TurretTypes.Normal;
+        public static WingTypes wingType = WingTypes.Normal;
+        public static PropellerType propellerType = PropellerType.Normal;
+        public static AmmoType ammoType = AmmoType.Bullets;
 
         private const int PlayerWidth = 21;
         private const int PlayerHeight = 19;
@@ -59,11 +64,48 @@ namespace Journey_Of_The_Ship
         private List<Vector2> afterImagePositions = new List<Vector2>();
         private List<float> afterImageAlpha = new List<float>();
 
+        public enum TurretTypes
+        {
+            Normal,
+            Longer,
+            Powerful
+        }
+
+        public enum WingTypes
+        {
+            Normal,
+
+        }
+
+        public enum PropellerType
+        {
+            Normal,
+        }
+
+        public enum AmmoType
+        {
+            Bullets,
+            Missiles
+        }
+
         public override void Initialize()
         {
             dying = false;
             explosionCounter = 0;
             hitbox = new Rectangle((int)position.X, (int)position.Y, PlayerWidth, PlayerHeight);
+
+            if (turretType == TurretTypes.Normal)
+            {
+                shootSpeed = 2f;
+            }
+            else if (turretType == TurretTypes.Longer)
+            {
+                shootSpeed = 2.6f;
+            }
+            else if (turretType == TurretTypes.Powerful)
+            {
+
+            }
         }
 
         public override void Update()
@@ -78,6 +120,7 @@ namespace Journey_Of_The_Ship
             AnimateShip();
             HandleAbilities();
             HandleAfterImages();
+            ExtraEffects();
             CollisionBody[] bodiesArray = Main.activeEntities.ToArray();
             DetectCollisions(bodiesArray.ToList());
             CollisionBody[] projectilesArray = Main.activeProjectiles.ToArray();
@@ -162,14 +205,14 @@ namespace Journey_Of_The_Ship
             {
                 shootTimer += 3;
                 Main.StartScreenShake(1, 1);
-                Bullet.NewBullet(shootPos + centerTurretOffset, new Vector2(0f, -shootSpeed), true);
+                SpawnProjectile(shootPos + centerTurretOffset, new Vector2(0f, -shootSpeed));
                 return;
             }
             switch (shootLevel)
             {
                 case 1:
                     shootTimer += 30;
-                    Bullet.NewBullet(shootPos + centerTurretOffset, new Vector2(0f, -shootSpeed), true);
+                    SpawnProjectile(shootPos + centerTurretOffset, new Vector2(0f, -shootSpeed));
                     break;
                 case 2:
                     turretNumber++;
@@ -185,7 +228,7 @@ namespace Journey_Of_The_Ship
                     {
                         shootPos += rightTurretOffset;
                     }
-                    Bullet.NewBullet(shootPos, new Vector2(0f, -shootSpeed), true);
+                    SpawnProjectile(shootPos, new Vector2(0f, -shootSpeed));
                     break;
                 case 3:
                     turretNumber++;
@@ -205,8 +248,20 @@ namespace Journey_Of_The_Ship
                     {
                         shootPos += rightTurretOffset;
                     }
-                    Bullet.NewBullet(shootPos, new Vector2(0f, -shootSpeed), true);
+                    SpawnProjectile(shootPos, new Vector2(0f, -shootSpeed));
                     break;
+            }
+        }
+
+        private void SpawnProjectile(Vector2 position, Vector2 velocity, bool friendly = true)
+        {
+            if (ammoType == AmmoType.Bullets)
+            {
+                Bullet.NewBullet(position, velocity, friendly);
+            }
+            else if (ammoType == AmmoType.Missiles)
+            {
+                Missile.NewMissile(position, velocity, friendly);
             }
         }
 
@@ -254,6 +309,28 @@ namespace Journey_Of_The_Ship
                 dashKeyCanPressAgain[1] = false;
                 dashCooldown = DashCooldownTime;
                 dashSound.Play();
+            }
+        }
+
+        private void ExtraEffects()
+        {
+            if (Main.random.Next(0, 5) == 0)
+            {
+                for (int s = 0; s < Main.random.Next(1, 4); s++)
+                {
+                    Vector2 offset = new Vector2(4f, 15f);
+                    if (Main.random.Next(0, 2) == 1)
+                    {
+                        offset.X += 12f;
+                    }
+                    Vector2 position = Main.player.position + offset;
+                    float angle = 270f + Main.random.Next(-15, 15 + 1);
+                    float angleInRadians = MathHelper.ToRadians(angle);
+                    Vector2 velocity = new Vector2((float)Math.Cos(angleInRadians), (float)Math.Sin(angleInRadians));
+                    velocity.Normalize();
+                    velocity *= -0.6f;
+                    Smoke.NewSmokeParticle(position, velocity, Color.Orange, Color.Gray, 5, 8, 8);
+                }
             }
         }
 

@@ -8,16 +8,10 @@ namespace Journey_Of_The_Ship.UI
         public static Texture2D settingsPanel;
         public Vector2 position = new Vector2(Main.desiredResolutionWidth, 0f);     //Off-screen
 
-        private Slider musicVolumeSlider = new Slider(new Vector2(32f, 82f), 45, 4, Color.White, "Music Volume", 2);
-        private Slider soundEffectVolumeSlider = new Slider(new Vector2(32f, 92f), 45, 4, Color.Red, "SFX Volume", 2);
+        private Slider musicVolumeSlider = new Slider(new Vector2(32f, 82f), 45, 4, Color.White, "Music Volume", Main.musicVolume, 2);
+        private Slider soundEffectVolumeSlider = new Slider(new Vector2(32f, 92f), 45, 4, Color.Red, "SFX Volume", Main.soundEffectVolume, 2);
 
         private Color textColor = new Color(88, 240, 99);
-
-        public void InitializeSettingsData()
-        {
-            musicVolumeSlider.SetValue(Main.musicVolume);
-            soundEffectVolumeSlider.SetValue(Main.soundEffectVolume);
-        }
 
         public override void Update()
         {

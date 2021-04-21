@@ -48,6 +48,8 @@ namespace Journey_Of_The_Ship
                 Main.ReInitializeGame();
                 EndAnimation(GameEntry);
                 PlayPlayerEntryAnimation();
+                Main.mainUI.DestroyInstance(Main.mainUI);
+                Main.mainUI = null;
             }
         }
 

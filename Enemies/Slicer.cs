@@ -16,8 +16,9 @@ namespace Journey_Of_The_Ship.Enemies
         public static Texture2D slicerSpritesheet;
         public static Texture2D slicerAfterImageTexture;
 
-        private const int SlicerWidth = 23;
-        private const int SlicerHeight = 23;
+        public override int Width => 23;
+        public override int Height => 23;
+
         private const float SlicerScale = 0.8f;
         private const int DashChargeUpTime = 180;
         private const float SlicerDetectionRange = 50f;
@@ -41,7 +42,7 @@ namespace Journey_Of_The_Ship.Enemies
         {
             Slicer currentInstance = new Slicer();
             currentInstance.position = position;
-            currentInstance.hitbox = new Rectangle((int)currentInstance.position.X, (int)currentInstance.position.Y, SlicerWidth, SlicerHeight);
+            currentInstance.hitbox = new Rectangle((int)currentInstance.position.X, (int)currentInstance.position.Y, currentInstance.Width, currentInstance.Height);
             currentInstance.velocity = new Vector2(0f, 0.3f);
             Main.activeEntities.Add(currentInstance);
         }
@@ -85,15 +86,16 @@ namespace Journey_Of_The_Ship.Enemies
             }
 
             position += velocity;
-            hitbox.X = (int)position.X - (SlicerWidth / 2);
-            hitbox.Y = (int)position.Y - (SlicerHeight / 2);
+            hitbox.X = (int)position.X - (Width / 2);
+            hitbox.Y = (int)position.Y - (Height / 2);
+            center = position;
             rotation += rotationToAdd;
 
             if (health <= 0)
             {
-                DropPowerUp(1, new Vector2(SlicerWidth / 2f, SlicerHeight / 2f));
-                SpawnGore(Main.random.Next(4, 5 + 1), SlicerWidth, SlicerHeight, Main.random.Next(1, 2 + 1));
-                GenerateSmoke(Color.Orange, Color.Gray, SlicerWidth, SlicerHeight, 16);
+                DropPowerUp(1, new Vector2(Width / 2f, Height / 2f));
+                SpawnGore(Main.random.Next(4, 5 + 1), Width, Height, Main.random.Next(1, 2 + 1));
+                GenerateSmoke(Color.Orange, Color.Gray, Width, Height, 16);
                 DestroyInstance(this);
             }
             if (position.Y > Main.desiredResolutionHeight + 50)
@@ -163,12 +165,12 @@ namespace Journey_Of_The_Ship.Enemies
             {
                 frame = 4;
             }
-            animRect = new Rectangle(0, frame * SlicerHeight, SlicerWidth, SlicerHeight);
+            animRect = new Rectangle(0, frame * Height, Width, Height);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            Vector2 origin = new Vector2(SlicerWidth / 2f, SlicerHeight / 2f);
+            Vector2 origin = new Vector2(Width / 2f, Height / 2f);
             for (int a = 0; a < afterImageAlpha.Count; a++)
             {
                 if (afterImageAlpha[a] > 0f)

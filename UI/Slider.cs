@@ -23,7 +23,7 @@ namespace Journey_Of_The_Ship.UI
         public Vector2 relativePosition;
         public Rectangle rect;
 
-        public Slider(Vector2 pos, int width, int height, Color color, string label = "", int sliderInteractionLayer = 1)
+        public Slider(Vector2 pos, int width, int height, Color color, string label = "", float defaultValue = -1f, int sliderInteractionLayer = 1)
         {
             relativePosition = pos;
             rect = new Rectangle((int)pos.X, (int)pos.Y, width, height);
@@ -31,6 +31,8 @@ namespace Journey_Of_The_Ship.UI
             sliderPosition.Y = pos.Y + (height / 2f);
             sliderName = label + ":";
             interactionLayer = sliderInteractionLayer;
+            if (defaultValue != -1f)
+                SetValue(defaultValue);
         }
 
         public override void Update()
@@ -63,7 +65,7 @@ namespace Journey_Of_The_Ship.UI
 
         public void SetValue(float sliderValue)
         {
-            sliderPosition.X = screenPosition.X + ((screenPosition.X + rect.Width) * sliderValue);
+            sliderPosition.X = screenPosition.X + (rect.Width * sliderValue);
             value = sliderValue;
         }
 

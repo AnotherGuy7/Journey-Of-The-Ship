@@ -24,8 +24,9 @@ namespace Journey_Of_The_Ship.UI
         private Color buttonActiveColor;
         private Color buttonInactiveColor;
         private float scale = 1f;
+        private int buttonInteractionLayer = 0;
 
-        public TextureCollisionButton(Texture2D texture, Vector2 position, Color activeColor, Color inactiveColor, int buttonScale)
+        public TextureCollisionButton(Texture2D texture, Vector2 position, Color activeColor, Color inactiveColor, int buttonScale, int interactionLayer)
         {
             buttonPosition = position;
             buttonTexture = texture;
@@ -33,6 +34,7 @@ namespace Journey_Of_The_Ship.UI
             scale = buttonScale;
             buttonActiveColor = activeColor;
             buttonInactiveColor = inactiveColor;
+            buttonInteractionLayer = 1;
 
             Color[] colorArray = new Color[buttonTexture.Width * buttonTexture.Height];
             buttonTexture.GetData(colorArray);
@@ -62,6 +64,10 @@ namespace Journey_Of_The_Ship.UI
             buttonPressed = false;
             buttonHoveredOver = false;
             drawColor = buttonInactiveColor;
+
+            if (Main.uiInteractionLayer != buttonInteractionLayer)
+                return;
+
             if (buttonRect.Contains(Main.mousePosition))
             {
                 //Vector2 normalizedMousePosition = (Main.mousePosition - buttonPosition) / scale;      //Only works if the origin is at 0. Gets the coordinate of the mouse as if it were hovering over the texture in an image editor
@@ -77,7 +83,6 @@ namespace Journey_Of_The_Ship.UI
                     }
                 }
 
-                Main.debugValue = normalizedMousePosition.ToString();
                 if (buttonHoveredOver)
                 {
                     drawColor = buttonActiveColor;

@@ -16,8 +16,8 @@ namespace Journey_Of_The_Ship.Enemies
         public static Texture2D raySpritesheet;
         public static SoundEffect laserSound;
 
-        private const int RayWidth = 7;
-        private const int RayHeight = 11;
+        public override int Width => 7;
+        public override int Height => 11;
 
         private int frame = 0;
         private int frameCounter = 0;
@@ -34,7 +34,7 @@ namespace Journey_Of_The_Ship.Enemies
         {
             RayEnemy currentInstance = new RayEnemy();
             currentInstance.position = position;
-            currentInstance.hitbox = new Rectangle((int)currentInstance.position.X, (int)currentInstance.position.Y, RayWidth, RayHeight);
+            currentInstance.hitbox = new Rectangle((int)currentInstance.position.X, (int)currentInstance.position.Y, currentInstance.Width, currentInstance.Height);
             Main.activeEntities.Add(currentInstance);
         }
 
@@ -52,7 +52,7 @@ namespace Journey_Of_The_Ship.Enemies
             }
             else
             {
-                if (position.X + RayWidth > Main.desiredResolutionWidth)
+                if (position.X + Width > Main.desiredResolutionWidth)
                 {
                     direction = -1;
                 }
@@ -72,6 +72,7 @@ namespace Journey_Of_The_Ship.Enemies
             position += velocity;
             hitbox.X = (int)position.X;
             hitbox.Y = (int)position.Y;
+            center = position + new Vector2(Width / 2f, Height / 2f);
 
             if (!shootingLaser)
             {
@@ -113,9 +114,9 @@ namespace Journey_Of_The_Ship.Enemies
                     health -= 1;
                     if (health <= 0)
                     {
-                        DropPowerUp(1, new Vector2(RayWidth / 2f, RayHeight / 2f));
-                        SpawnGore(Main.random.Next(6, 7 + 1), RayWidth, RayHeight, 1);
-                        GenerateSmoke(Color.Orange, Color.Gray, RayWidth, RayHeight, 16);
+                        DropPowerUp(1, new Vector2(Width / 2f, Height / 2f));
+                        SpawnGore(Main.random.Next(6, 7 + 1), Width, Height, 1);
+                        GenerateSmoke(Color.Orange, Color.Gray, Width, Height, 16);
                         if (laser != null)
                         {
                             laser.DestroyInstance(laser);
@@ -132,9 +133,9 @@ namespace Journey_Of_The_Ship.Enemies
                 Asteroid collidingAsteroid = collider as Asteroid;
                 collidingAsteroid.health -= 2;
                 Explosion.NewExplosion(collidingAsteroid.position, Vector2.Zero);
-                DropPowerUp(1, new Vector2(RayWidth / 2f, RayHeight / 2f));
-                SpawnGore(Main.random.Next(6, 7 + 1), RayWidth, RayHeight, 1);
-                GenerateSmoke(Color.Orange, Color.Gray, RayWidth, RayHeight, 16);
+                DropPowerUp(1, new Vector2(Width / 2f, Height / 2f));
+                SpawnGore(Main.random.Next(6, 7 + 1), Width, Height, 1);
+                GenerateSmoke(Color.Orange, Color.Gray, Width, Height, 16);
                 if (laser != null)
                 {
                     laser.DestroyInstance(laser);
@@ -156,7 +157,7 @@ namespace Journey_Of_The_Ship.Enemies
                 {
                     frame = 0;
                 }
-                animRect = new Rectangle(0, frame * RayHeight, RayWidth, RayHeight);
+                animRect = new Rectangle(0, frame * Height, Width, Height);
             }
         }
 

@@ -113,12 +113,13 @@ namespace Journey_Of_The_Ship
 
             LoadContent();
 
+            saveManager = new SaveManager();
+            saveManager.LoadGame();
+
             mainUI = new TitleScreen();
             parallax = new ParallaxBackground();
-            saveManager = new SaveManager();
             musicManager = new MusicManager();
             PlayerUI.InitializePlayerUI();
-            saveManager.LoadGame();
         }
 
         protected override void LoadContent()
@@ -131,6 +132,8 @@ namespace Journey_Of_The_Ship
             Player.playerSpritesheet = Content.Load<Texture2D>("Textures/Spritesheets/PlayerShip");
             Player.playerAfterImageTexture = Content.Load<Texture2D>("Textures/Objects/PlayerAfterImage");
             Bullet.bulletTexture = Content.Load<Texture2D>("Textures/Objects/Bullet");
+            Missile.missileTexture = Content.Load<Texture2D>("Textures/Spritesheets/Missile");
+            Missile.targetLockedIndicator = Content.Load<Texture2D>("Textures/UI/TargetLockedIndicator");
             Laser.laserTexture = Content.Load<Texture2D>("Textures/Objects/Laser");
             UFO.ufoSpritesheet = Content.Load<Texture2D>("Textures/Spritesheets/UFO");
             Slicer.slicerSpritesheet = Content.Load<Texture2D>("Textures/Spritesheets/Slicer");
@@ -197,6 +200,8 @@ namespace Journey_Of_The_Ship
             ModificationScreen.shipBarrels = Content.Load<Texture2D>("Textures/Objects/Icons/ShipBarrels");
             ModificationScreen.shipPropellers = Content.Load<Texture2D>("Textures/Objects/Icons/ShipPropellers");
             ModificationScreen.shipWings = Content.Load<Texture2D>("Textures/Objects/Icons/ShipWings");
+            ModificationScreen.bulletTexture = Content.Load<Texture2D>("Textures/Objects/Icons/Bullet");
+            ModificationScreen.missileTexture = Content.Load<Texture2D>("Textures/Objects/Icons/Missile");
 
             Player.shootSound = Content.Load<SoundEffect>("Sounds/PlayerShoot");
             Player.dashSound = Content.Load<SoundEffect>("Sounds//Dash");

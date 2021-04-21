@@ -17,8 +17,9 @@ namespace Journey_Of_The_Ship.Enemies
         public static SoundEffect shootSound;
         public static SoundEffect deathSound;
 
-        private const int UFOWidth = 27;
-        private const int UFOHeight = 27;
+        public override int Width => 27;
+        public override int Height => 27;
+
         //private const int MaxFrames = 6;
         private const int FlyFrames = 5;
         private const int DeathFrame = 5;
@@ -40,7 +41,7 @@ namespace Journey_Of_The_Ship.Enemies
         {
             UFO currentInstance = new UFO();
             currentInstance.position = position;
-            currentInstance.hitbox = new Rectangle((int)currentInstance.position.X, (int)currentInstance.position.Y, UFOWidth, UFOHeight);
+            currentInstance.hitbox = new Rectangle((int)currentInstance.position.X, (int)currentInstance.position.Y, currentInstance.Width, currentInstance.Height);
             Main.activeEntities.Add(currentInstance);
         }
 
@@ -69,6 +70,7 @@ namespace Journey_Of_The_Ship.Enemies
             position += velocity;
             hitbox.X = (int)position.X;
             hitbox.Y = (int)position.Y;
+            center = position + new Vector2(Width / 2f, Height / 2f);
 
             shootCounter++;
             if (shootCounter >= 4 * 60 && health > 0)
@@ -83,10 +85,10 @@ namespace Journey_Of_The_Ship.Enemies
                 deathTimer++;
                 if (deathTimer >= 80)
                 {
-                    DropAbilities(100, new Vector2(UFOWidth / 2f, UFOHeight / 2f));
-                    DropPowerUp(8, new Vector2(UFOWidth / 2f, UFOHeight / 2f));
-                    SpawnGore(Main.random.Next(0, 1 + 1), UFOWidth, UFOHeight, 4);
-                    Explosion.NewExplosion(position + new Vector2(UFOWidth / 2f, UFOHeight / 2f), Vector2.Zero);
+                    DropAbilities(100, new Vector2(Width / 2f, Height / 2f));
+                    DropPowerUp(8, new Vector2(Width / 2f, Height / 2f));
+                    SpawnGore(Main.random.Next(0, 1 + 1), Width, Height, 4);
+                    Explosion.NewExplosion(position + new Vector2(Width / 2f, Height / 2f), Vector2.Zero);
                     Main.StartScreenShake(8, 1);
                     DestroyInstance(this);
                 }
@@ -134,11 +136,11 @@ namespace Journey_Of_The_Ship.Enemies
                 {
                     frame = 0;
                 }
-                animRect = new Rectangle(0, frame * UFOHeight, UFOWidth, UFOHeight);
+                animRect = new Rectangle(0, frame * Height, Width, Height);
             }
             if (health <= 0 && deathTimer >= 70)
             {
-                animRect = new Rectangle(0, DeathFrame * UFOHeight, UFOWidth, UFOHeight);
+                animRect = new Rectangle(0, DeathFrame * Height, Width, Height);
             }
         }
 
@@ -149,7 +151,7 @@ namespace Journey_Of_The_Ship.Enemies
                 smokeSpawnTimer++;
                 if (smokeSpawnTimer % 30 == 0)
                 {
-                    GenerateSmoke(Color.Orange, Color.Gray, UFOWidth, UFOHeight, 2);
+                    GenerateSmoke(Color.Orange, Color.Gray, Width, Height, 2);
                 }
             }
             else if (health == 1)
@@ -157,13 +159,13 @@ namespace Journey_Of_The_Ship.Enemies
                 smokeSpawnTimer++;
                 if (smokeSpawnTimer % 15 == 0)
                 {
-                    GenerateSmoke(Color.Orange, Color.Gray, UFOWidth, UFOHeight, 6);
+                    GenerateSmoke(Color.Orange, Color.Gray, Width, Height, 6);
                     rumbleOffset = new Vector2(Main.random.Next(-1, 2) / 2f, Main.random.Next(-1, 2) / 2f);
                 }
             }
             else if (health == 0)
             {
-                GenerateSmoke(Color.Orange, Color.Gray, UFOWidth, UFOHeight, 4);
+                GenerateSmoke(Color.Orange, Color.Gray, Width, Height, 4);
             }
         }
 

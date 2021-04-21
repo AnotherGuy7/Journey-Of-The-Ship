@@ -6,7 +6,11 @@ namespace Journey_Of_The_Ship.Enemies
 {
     public abstract class Enemy : CollisionBody
     {
+        public virtual int Width { get; }
+        public virtual int Height { get; }
+
         public Vector2 position;
+        public Vector2 center;
 
 
         public void GenerateSmoke(Color startColor, Color endColor, int width, int height, int amount)

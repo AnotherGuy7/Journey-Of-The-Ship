@@ -302,6 +302,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/Gore/Gore_9.png
 
+#begin Textures/Objects/Icons/Bullet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/Icons/Bullet.png
+
 #begin Textures/Objects/Icons/ExtendedBarrel.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -313,6 +325,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/Icons/ExtendedBarrel.png
+
+#begin Textures/Objects/Icons/Missile.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/Icons/Missile.png
 
 #begin Textures/Objects/Icons/NormalBarrel.png
 /importer:TextureImporter
@@ -614,6 +638,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Spritesheets/Explosion.png
 
+#begin Textures/Spritesheets/Missile.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Spritesheets/Missile.png
+
 #begin Textures/Spritesheets/PlayerShip.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -817,4 +853,16 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/UI/SliderButton.png
+
+#begin Textures/UI/TargetLockedIndicator.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/UI/TargetLockedIndicator.png
 
