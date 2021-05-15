@@ -196,12 +196,17 @@ namespace Journey_Of_The_Ship
             ModificationScreen.normalBarrelTexture = Content.Load<Texture2D>("Textures/Objects/Icons/NormalBarrel");
             ModificationScreen.extendedBarrelTexture = Content.Load<Texture2D>("Textures/Objects/Icons/ExtendedBarrel");
             ModificationScreen.powerfulBarrelTexture = Content.Load<Texture2D>("Textures/Objects/Icons/PowerfulBarrel");
+            ModificationScreen.normalWingsTexture = Content.Load<Texture2D>("Textures/Objects/Icons/NormalWings");
+            ModificationScreen.thinCutWingsTexture = Content.Load<Texture2D>("Textures/Objects/Icons/ThinCutWings");
+            ModificationScreen.hoverEquippedWingsTexture = Content.Load<Texture2D>("Textures/Objects/Icons/HoverEquippedWings");
+            ModificationScreen.chargedWingsTexture = Content.Load<Texture2D>("Textures/Objects/Icons/ChargedWings");
             ModificationScreen.shipTexture = Content.Load<Texture2D>("Textures/Objects/Icons/Ship");
             ModificationScreen.shipBarrels = Content.Load<Texture2D>("Textures/Objects/Icons/ShipBarrels");
             ModificationScreen.shipPropellers = Content.Load<Texture2D>("Textures/Objects/Icons/ShipPropellers");
             ModificationScreen.shipWings = Content.Load<Texture2D>("Textures/Objects/Icons/ShipWings");
             ModificationScreen.bulletTexture = Content.Load<Texture2D>("Textures/Objects/Icons/Bullet");
             ModificationScreen.missileTexture = Content.Load<Texture2D>("Textures/Objects/Icons/Missile");
+            ModificationScreen.modificationHangarTexture = Content.Load<Texture2D>("Textures/Backgrounds/ModificationHangar");
 
             Player.shootSound = Content.Load<SoundEffect>("Sounds/PlayerShoot");
             Player.dashSound = Content.Load<SoundEffect>("Sounds//Dash");
@@ -459,13 +464,13 @@ namespace Journey_Of_The_Ship
                         float spawnPosY = -50;
                         Slicer.NewSlicer(new Vector2(spawnPosX, spawnPosY));
                     }
-                    if (random.Next(1, 520) == 1)
+                    if (random.Next(1, 720) == 1)
                     {
                         float spawnPosX = random.Next(8, desiredResolutionWidth - 8);
                         float spawnPosY = -50;
                         RayEnemy.NewRay(new Vector2(spawnPosX, spawnPosY));
                     }
-                    if (random.Next(1, 520) == 1)
+                    if (random.Next(1, 720) == 1)
                     {
                         float spawnPosX = random.Next(16, desiredResolutionWidth - 16);
                         float spawnPosY = -50;
@@ -505,5 +510,20 @@ namespace Journey_Of_The_Ship
                 Star.NewStarEffect(new Vector2(starSpawnPosX, starSpawnPosY), new Vector2(0f, starFallSpeed), 0f, random.Next(0, 2));
             }
         }
+
+        /*public static void DrawDebugRect(GraphicsDevice graphicsDevice, SpriteBatch spriteBatch, Rectangle rect)
+        {
+            Texture2D rectTexture = new Texture2D(graphicsDevice, rect.Width, rect.Height);
+
+            Color[] colorsArray = new Color[rect.Width * rect.Height];
+            for (int c = 0; c < colorsArray.Length; c++)
+            {
+                colorsArray[c] = Color.Orange;
+            }
+            rectTexture.SetData(colorsArray);
+            debugValue = rect.Center.ToString();
+
+            spriteBatch.Draw(rectTexture, rect, Color.White);
+        }*/
     }
 }

@@ -20,7 +20,8 @@ namespace Journey_Of_The_Ship.UI
         public ButtonStyle buttonStyle = ButtonStyle.MainMenu;
         public bool buttonHoveredOver = false;
         public bool buttonPressed = false;
-        public float scale = 0.6f;
+        public bool focused = false;
+        public float scale = 1f;
         public string stringText;
         public bool visible = true;
 
@@ -29,28 +30,33 @@ namespace Journey_Of_The_Ship.UI
         private Color activeButtonColor;
         private Vector2 textOutlineOffset;
         private int interactionLayer;
+        private float defaultScale = 1f;
+        private float activeScale = 1f;
 
         /// <summary>
         /// A button with partial borders around it.
         /// </summary>
-        public Button(string text, Vector2 position, Color inactiveColor, Color activeColor, int buttonInteractionLayer = 1)
+        public Button(string text, Vector2 position, Color inactiveColor, Color activeColor, float inactiveScale = 0.6f, float activeScale = 0.65f, int buttonInteractionLayer = 1)
         {
             stringText = text;
             textSize = Main.mainFont.MeasureString(text);
-            int width = (int)(textSize.X * scale);
-            int height = (int)(textSize.Y * scale);
+            int width = (int)(textSize.X * inactiveScale);
+            int height = (int)(textSize.Y * inactiveScale);
             buttonRect = new Rectangle((int)position.X - (width / 2), (int)position.Y - (height / 2), width, height);
             buttonPosition = new Vector2(buttonRect.X, buttonRect.Y);
             inactiveButtonColor = inactiveColor;
             activeButtonColor = activeColor;
             buttonStyle = ButtonStyle.MainMenu;
+            scale = inactiveScale;
+            defaultScale = inactiveScale;
+            this.activeScale = activeScale;
             interactionLayer = buttonInteractionLayer;
         }
 
         /// <summary>
         /// A button with text and an icon. Outlined with white borders.
         /// </summary>
-        public Button(Texture2D texture, string text, int width, int height, Vector2 position, Color inactiveColor, Color activeColor, int buttonInteractionLayer = 1)
+        public Button(Texture2D texture, string text, int width, int height, Vector2 position, Color inactiveColor, Color activeColor, float inactiveScale = 1f, float activeScale = 1f, int buttonInteractionLayer = 1)
         {
             buttonIcon = texture;
             stringText = text;
@@ -60,22 +66,27 @@ namespace Journey_Of_The_Ship.UI
             inactiveButtonColor = inactiveColor;
             activeButtonColor = activeColor;
             buttonStyle = ButtonStyle.ButtonWithIcon;
+            scale = inactiveScale;
+            defaultScale = inactiveScale;
+            this.activeScale = activeScale;
             interactionLayer = buttonInteractionLayer;
         }
 
         /// <summary>
         /// A button with only an icon. Outlined with white borders.
         /// </summary>
-        public Button(Texture2D texture, Vector2 position, Color inactiveColor, Color activeColor, float buttonScale = 1f, int buttonInteractionLayer = 1)
+        public Button(Texture2D texture, Vector2 position, Color inactiveColor, Color activeColor, float inactiveScale = 1f, float activeScale = 1f, int buttonInteractionLayer = 1)
         {
             buttonIcon = texture;
-            buttonRect = new Rectangle((int)position.X, (int)position.Y, texture.Width, texture.Height);
+            buttonRect = new Rectangle((int)position.X, (int)position.Y, (int)(texture.Width * inactiveScale), (int)(texture.Height * inactiveScale));
             buttonPosition = new Vector2(buttonRect.X, buttonRect.Y);
             inactiveButtonColor = inactiveColor;
             activeButtonColor = activeColor;
             buttonStyle = ButtonStyle.IconOnly;
+            scale = inactiveScale;
+            defaultScale = inactiveScale;
+            this.activeScale = activeScale;
             interactionLayer = buttonInteractionLayer;
-            scale = buttonScale;
         }
 
         public enum ButtonStyle
@@ -90,7 +101,7 @@ namespace Journey_Of_The_Ship.UI
             if (!visible)
                 return;
 
-            scale = 0.6f;
+            scale = defaultScale;
             buttonPressed = false;
             buttonHoveredOver = false;
             drawColor = inactiveButtonColor;
@@ -101,9 +112,16 @@ namespace Journey_Of_The_Ship.UI
             if (Main.uiInteractionLayer != interactionLayer)
                 return;
 
+            if (focused)
+            {
+                scale = activeScale;
+                drawColor = activeButtonColor;
+                textOutlineOffset += new Vector2(0.5f);
+            }
+
             if (buttonRect.Contains(Main.mousePosition))
             {
-                scale = 0.65f;
+                scale = activeScale;
                 buttonHoveredOver = true;
                 drawColor = activeButtonColor;
                 textOutlineOffset += new Vector2(0.5f);
@@ -153,10 +171,12 @@ namespace Journey_Of_The_Ship.UI
             else if (buttonStyle == ButtonStyle.IconOnly)
             {
                 Vector2 buttonPosition = new Vector2(buttonRect.X, buttonRect.Y);
+                Vector2 iconPosition = buttonPosition + new Vector2(buttonRect.Width / 2f, buttonRect.Height / 2f);
+                Vector2 iconOrigin = new Vector2(buttonIcon.Width / 2f, buttonIcon.Height / 2f);
 
                 DrawBorderLines(spriteBatch, buttonPosition);
 
-                spriteBatch.Draw(buttonIcon, buttonPosition, null, drawColor, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+                spriteBatch.Draw(buttonIcon, iconPosition, null, drawColor, 0f, iconOrigin, scale, SpriteEffects.None, 0f);
             }
 
             //Vector2 position2 = new Vector2(buttonRect.X, buttonRect.Y);
@@ -168,21 +188,25 @@ namespace Journey_Of_The_Ship.UI
             //Top line
             Vector2 topLinePosition = position + new Vector2(1f, 0f);
             Vector2 topLineScale = new Vector2(buttonRect.Width - 2f, 1f);
+            //topLineScale.X *= scale;
             spriteBatch.Draw(whitePixel, topLinePosition, null, drawColor, 0f, Vector2.Zero, topLineScale, SpriteEffects.None, 0f);
 
             //Left line
             Vector2 leftLinePosition = position + new Vector2(0f, 1f);
             Vector2 leftLineScale = new Vector2(1f, buttonRect.Height - 2f);
+            //leftLineScale.Y *= scale;
             spriteBatch.Draw(whitePixel, leftLinePosition, null, drawColor, 0f, Vector2.Zero, leftLineScale, SpriteEffects.None, 0f);
 
             //Right line
             Vector2 rightLinePosition = position + new Vector2(buttonRect.Width - 1f, 1f);
             Vector2 rightLineScale = new Vector2(1f, buttonRect.Height - 2f);
+            //rightLineScale.Y *= scale;
             spriteBatch.Draw(whitePixel, rightLinePosition, null, drawColor, 0f, Vector2.Zero, rightLineScale, SpriteEffects.None, 0f);
 
             //Left line
             Vector2 bottomLinePosition = position + new Vector2(1f, buttonRect.Height - 1f);
             Vector2 bottomLineScale = new Vector2(buttonRect.Width - 2f, 1f);
+            //bottomLineScale.X *= scale;
             spriteBatch.Draw(whitePixel, bottomLinePosition, null, drawColor, 0f, Vector2.Zero, bottomLineScale, SpriteEffects.None, 0f);
         }
     }

@@ -12,6 +12,7 @@ namespace Journey_Of_The_Ship.UI
         public static Texture2D shipWings;
         public static Texture2D bulletTexture;
         public static Texture2D missileTexture;
+        public static Texture2D modificationHangarTexture;
 
         private TextureCollisionButton shipBarrelsButton;
         private TextureCollisionButton shipPropellersButton;
@@ -24,6 +25,14 @@ namespace Journey_Of_The_Ship.UI
         private Texture2D[] turretModTextures = new Texture2D[3];
         public string[] turretModLabels = new string[3] { "Normal", "Longer Cannon Barrels", "More Powerful Barrels" };
         private ButtonList turretModList;
+
+        public static Texture2D normalWingsTexture;
+        public static Texture2D thinCutWingsTexture;
+        public static Texture2D hoverEquippedWingsTexture;
+        public static Texture2D chargedWingsTexture;
+        private Texture2D[] wingModTextures = new Texture2D[4];
+        public string[] wingModLabels = new string[4] { "Normal", "Thin Cut Wings", "Hover Equipped Wings", "ChargedWings" };
+        private ButtonList wingModList;
 
         private Button startButton;
         private Button bulletsButton;
@@ -52,20 +61,28 @@ namespace Journey_Of_The_Ship.UI
             turretModTextures[0] = normalBarrelTexture;
             turretModTextures[1] = extendedBarrelTexture;
             turretModTextures[2] = powerfulBarrelTexture;
-            turretModList = new ButtonList(3, new Vector2(15, 20), 70, 20, turretModTextures, turretModLabels, Color.White, Color.Orange, 2);
+            turretModList = new ButtonList(3, new Vector2(5, 20), 70, 20, turretModTextures, turretModLabels, Color.White, Color.Orange, 2);
             turretModList.selectedItem = (int)Player.turretType;
 
+            wingModTextures[0] = normalWingsTexture;
+            wingModTextures[1] = thinCutWingsTexture;
+            wingModTextures[2] = hoverEquippedWingsTexture;
+            wingModTextures[3] = chargedWingsTexture;
+            wingModList = new ButtonList(4, new Vector2(80, 20), 70, 20, wingModTextures, wingModLabels, Color.White, Color.Orange, 2);
+            wingModList.selectedItem = (int)Player.wingType;
+
             Vector2 startButtonPos = new Vector2(Main.desiredResolutionWidth, Main.desiredResolutionHeight);
-            startButton = new Button("Set Out", startButtonPos, Color.White, Color.LightYellow, 1);
+            startButton = new Button("Set Out", startButtonPos, Color.White, Color.LightYellow, buttonInteractionLayer: 1);
             startButton.buttonPosition -= new Vector2(startButton.buttonRect.Width, startButton.buttonRect.Height);
 
-            bulletsButton = new Button(bulletTexture, new Vector2(25f, Main.desiredResolutionHeight - 20f), Color.White, Color.Orange, 1f, 1);
-            missilesButton = new Button(missileTexture, new Vector2(50f, Main.desiredResolutionHeight - 20f), Color.White, Color.Orange, 1f, 1);
+            bulletsButton = new Button(bulletTexture, new Vector2(30f, Main.desiredResolutionHeight - 18f), Color.White, Color.Orange, 0.6f, 0.65f, 1);
+            missilesButton = new Button(missileTexture, bulletsButton.buttonPosition + new Vector2(16f, 0f), Color.White, Color.Orange, 0.6f, 0.65f, 1);
         }
 
         public override void Update()
         {
             turretModList.Update();
+            wingModList.Update();
             shipBarrelsButton.Update();
             shipPropellersButton.Update();
             shipWingsButton.Update();
@@ -103,6 +120,14 @@ namespace Journey_Of_The_Ship.UI
                     turretModList.Expand();
                 }
             }
+            if (shipWingsButton.buttonPressed)
+            {
+                if (!wingModList.expanded)
+                {
+                    Main.uiInteractionLayer = 2;
+                    wingModList.Expand();
+                }
+            }
 
             if (startButton.buttonPressed)
             {
@@ -122,10 +147,14 @@ namespace Journey_Of_The_Ship.UI
             if (bulletsButton.buttonPressed)
             {
                 Player.ammoType = Player.AmmoType.Bullets;
+                bulletsButton.focused = true;
+                missilesButton.focused = false;
             }
             if (missilesButton.buttonPressed)
             {
                 Player.ammoType = Player.AmmoType.Missiles;
+                bulletsButton.focused = false;
+                missilesButton.focused = true;
             }
 
             if (turretModList.expanded)
@@ -141,12 +170,26 @@ namespace Journey_Of_The_Ship.UI
                     }
                 }
             }
+            if (wingModList.expanded)
+            {
+                for (int i = 0; i < wingModList.amountOfButtons; i++)
+                {
+                    if (wingModList.buttonPressed[i])
+                    {
+                        wingModList.Detract();
+                        Main.uiInteractionLayer = 1;
+                        Player.wingType = (Player.WingTypes)i - 1;
+                        break;
+                    }
+                }
+            }
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
             DrawLayeredShip(spriteBatch);
             turretModList.Draw(spriteBatch);
+            wingModList.Draw(spriteBatch);
             startButton.Draw(spriteBatch);
             bulletsButton.Draw(spriteBatch);
             missilesButton.Draw(spriteBatch);
@@ -160,6 +203,7 @@ namespace Journey_Of_The_Ship.UI
             Vector2 shipOffset = new Vector2((shipTexture.Width * shipScale) / 2f, (shipTexture.Height * shipScale) / 2f);
             Vector2 shipPos = new Vector2(Main.desiredResolutionWidth / 2f, Main.desiredResolutionHeight / 2f) - shipOffset;
 
+            spriteBatch.Draw(modificationHangarTexture, Vector2.Zero, Color.Gray);
             spriteBatch.Draw(shipTexture, shipPos, null, Color.White, 0f, Vector2.Zero, shipScale, SpriteEffects.None, 0f);
             shipBarrelsButton.Draw(spriteBatch);
             shipPropellersButton.Draw(spriteBatch);

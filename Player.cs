@@ -208,48 +208,83 @@ namespace Journey_Of_The_Ship
                 SpawnProjectile(shootPos + centerTurretOffset, new Vector2(0f, -shootSpeed));
                 return;
             }
-            switch (shootLevel)
+            if (ammoType == AmmoType.Bullets)
             {
-                case 1:
-                    shootTimer += 30;
-                    SpawnProjectile(shootPos + centerTurretOffset, new Vector2(0f, -shootSpeed));
-                    break;
-                case 2:
-                    turretNumber++;
-                    if (turretNumber > 1)
-                        turretNumber = 0;
+                switch (shootLevel)
+                {
+                    case 1:
+                        shootTimer += 30;
+                        SpawnProjectile(shootPos + centerTurretOffset, new Vector2(0f, -shootSpeed));
+                        break;
+                    case 2:
+                        turretNumber++;
+                        if (turretNumber > 1)
+                            turretNumber = 0;
 
-                    shootTimer += 25;
-                    if (turretNumber == 0)
-                    {
-                        shootPos += leftTurretOffset;
-                    }
-                    else
-                    {
-                        shootPos += rightTurretOffset;
-                    }
-                    SpawnProjectile(shootPos, new Vector2(0f, -shootSpeed));
-                    break;
-                case 3:
-                    turretNumber++;
-                    if (turretNumber > 2)
-                        turretNumber = 0;
+                        shootTimer += 25;
+                        if (turretNumber == 0)
+                        {
+                            shootPos += leftTurretOffset;
+                        }
+                        else
+                        {
+                            shootPos += rightTurretOffset;
+                        }
+                        SpawnProjectile(shootPos, new Vector2(0f, -shootSpeed));
+                        break;
+                    case 3:
+                        turretNumber++;
+                        if (turretNumber > 2)
+                            turretNumber = 0;
 
-                    shootTimer += 20;
-                    if (turretNumber == 0)
-                    {
-                        shootPos += leftTurretOffset;
-                    }
-                    else if (turretNumber == 1)
-                    {
-                        shootPos += centerTurretOffset;
-                    }
-                    else if (turretNumber == 2)
-                    {
-                        shootPos += rightTurretOffset;
-                    }
-                    SpawnProjectile(shootPos, new Vector2(0f, -shootSpeed));
-                    break;
+                        shootTimer += 20;
+                        if (turretNumber == 0)
+                        {
+                            shootPos += leftTurretOffset;
+                        }
+                        else if (turretNumber == 1)
+                        {
+                            shootPos += centerTurretOffset;
+                        }
+                        else if (turretNumber == 2)
+                        {
+                            shootPos += rightTurretOffset;
+                        }
+                        SpawnProjectile(shootPos, new Vector2(0f, -shootSpeed));
+                        break;
+                }
+            }
+            else if (ammoType == AmmoType.Missiles)
+            {
+                turretNumber++;
+                if (turretNumber > 1)
+                    turretNumber = 0;
+
+                shootPos.X -= 2f;
+                if (turretNumber == 0)
+                {
+                    shootPos += leftTurretOffset;
+                }
+                else
+                {
+                    shootPos += rightTurretOffset;
+                }
+
+                switch (shootLevel)
+                {
+                    case 1:
+                        shootTimer += 80;
+                        SpawnProjectile(shootPos, new Vector2(0f, -shootSpeed));
+                        break;
+                    case 2:
+                        shootTimer += 75;
+                        SpawnProjectile(shootPos, new Vector2(0f, -shootSpeed));
+                        break;
+                    case 3:
+                        shootTimer += 70;
+                        SpawnProjectile(shootPos, new Vector2(0f, -shootSpeed));
+                        break;
+                }
             }
         }
 

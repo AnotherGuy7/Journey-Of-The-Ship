@@ -65,14 +65,14 @@ namespace Journey_Of_The_Ship.UI
             {
                 if (i == 0)
                 {
-                    buttons[i] = new Button(buttonIcons[i], buttonLabels[i], averageButtonWidth, averageButtonHeight, listPosition, buttonsInactiveColor, buttonsActiveColor, 0);
-                    buttons[i].buttonPosition = listPosition;
-                    buttons[i].visible = false;
+                    buttons[i] = new Button(buttonIcons[i], buttonLabels[i], averageButtonWidth, averageButtonHeight, listPosition, buttonsInactiveColor, buttonsActiveColor, 1f, 1f, 0);
+                    buttons[i].buttonPosition = position;
+                    buttons[i].visible = true;
                 }
                 else
                 {
-                    buttons[i] = new Button(buttonIcons[i], buttonLabels[i], averageButtonWidth, averageButtonHeight, listPosition, buttonsInactiveColor, buttonsActiveColor, buttonsInteractionLayer);
-                    buttons[i].buttonPosition = listPosition;
+                    buttons[i] = new Button(buttonIcons[i], buttonLabels[i], averageButtonWidth, averageButtonHeight, listPosition, buttonsInactiveColor, buttonsActiveColor, 1f, 1f, buttonsInteractionLayer);
+                    buttons[i].buttonPosition = position;
                     buttons[i].visible = false;
                 }
             }

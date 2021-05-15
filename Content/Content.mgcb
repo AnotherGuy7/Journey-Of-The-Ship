@@ -74,6 +74,18 @@
 /processorParam:Quality=Best
 /build:Sounds/UFOShoot.wav
 
+#begin Textures/Backgrounds/ModificationHangar.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Backgrounds/ModificationHangar.png
+
 #begin Textures/Backgrounds/SpaceBackgroundSet1/Space1_Part1.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -314,6 +326,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/Icons/Bullet.png
 
+#begin Textures/Objects/Icons/ChargedWings.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/Icons/ChargedWings.png
+
 #begin Textures/Objects/Icons/ExtendedBarrel.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -325,6 +349,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/Icons/ExtendedBarrel.png
+
+#begin Textures/Objects/Icons/HoverEquippedWings.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/Icons/HoverEquippedWings.png
 
 #begin Textures/Objects/Icons/Missile.png
 /importer:TextureImporter
@@ -349,6 +385,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/Icons/NormalBarrel.png
+
+#begin Textures/Objects/Icons/NormalWings.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/Icons/NormalWings.png
 
 #begin Textures/Objects/Icons/PowerfulBarrel.png
 /importer:TextureImporter
@@ -409,6 +457,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/Icons/ShipWings.png
+
+#begin Textures/Objects/Icons/ThinCutWings.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/Icons/ThinCutWings.png
 
 #begin Textures/Objects/Laser.png
 /importer:TextureImporter
