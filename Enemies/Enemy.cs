@@ -8,9 +8,10 @@ namespace Journey_Of_The_Ship.Enemies
     {
         public virtual int Width { get; }
         public virtual int Height { get; }
+        public virtual int AmountOfHealth { get; }
 
-        public Vector2 position;
         public Vector2 center;
+        public int health = 1;
 
 
         public void GenerateSmoke(Color startColor, Color endColor, int width, int height, int amount)
@@ -54,6 +55,7 @@ namespace Journey_Of_The_Ship.Enemies
             if (addPoint)
                 Main.gameScore += 1;
 
+            Main.player.killsNeededForAbility -= 1;
             Main.activeEntities.Remove(enemy);
         }
     }

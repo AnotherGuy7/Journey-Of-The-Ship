@@ -12,6 +12,7 @@ namespace Journey_Of_The_Ship.Enemies
     {
         public override CollisionType[] colliderTypes => new CollisionType[1] { CollisionType.Projectiles };
         public override CollisionType collisionType => CollisionType.Enemies;
+        public override int AmountOfHealth => 1;
 
         public static Texture2D raySpritesheet;
         public static SoundEffect laserSound;
@@ -22,7 +23,6 @@ namespace Journey_Of_The_Ship.Enemies
         private int frame = 0;
         private int frameCounter = 0;
         private Vector2 shootOffset = new Vector2(0f, 11f);
-        private int health = 2;
         private int direction = 1;
         private int laserDurationTimer = 0;
         private int laserChargeUpTimer = 0;
@@ -35,6 +35,7 @@ namespace Journey_Of_The_Ship.Enemies
             RayEnemy currentInstance = new RayEnemy();
             currentInstance.position = position;
             currentInstance.hitbox = new Rectangle((int)currentInstance.position.X, (int)currentInstance.position.Y, currentInstance.Width, currentInstance.Height);
+            currentInstance.health = currentInstance.AmountOfHealth;
             Main.activeEntities.Add(currentInstance);
         }
 

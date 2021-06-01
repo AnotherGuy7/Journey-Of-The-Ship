@@ -20,6 +20,24 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/MainFont.spritefont
 
+#begin Shaders/BlackHoleShader.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Shaders/BlackHoleShader.fx
+
+#begin Sounds/BlackHoleBombActive.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/BlackHoleBombActive.wav
+
+#begin Sounds/BlackHoleBombOpen.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/BlackHoleBombOpen.wav
+
 #begin Sounds/Dash.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -55,6 +73,18 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:Sounds/PlayerShoot.wav
+
+#begin Sounds/SlicerAirCuts.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/SlicerAirCuts.wav
+
+#begin Sounds/SlicerChargeUp.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/SlicerChargeUp.wav
 
 #begin Sounds/StasisBeam.wav
 /importer:WavImporter
@@ -109,6 +139,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Backgrounds/SpaceBackgroundSet1/Space1_Part2.png
+
+#begin Textures/Objects/AccretionDisk.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/AccretionDisk.png
 
 #begin Textures/Objects/Asteroid_1.png
 /importer:TextureImporter
@@ -169,6 +211,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/Asteroid_5.png
+
+#begin Textures/Objects/BlackHoleBomb.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/BlackHoleBomb.png
 
 #begin Textures/Objects/Bullet.png
 /importer:TextureImporter
@@ -314,6 +368,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/Gore/Gore_9.png
 
+#begin Textures/Objects/Icons/BlackHole.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/Icons/BlackHole.png
+
 #begin Textures/Objects/Icons/Bullet.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -362,6 +428,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/Icons/HoverEquippedWings.png
 
+#begin Textures/Objects/Icons/IsotopeReactionContainer.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/Icons/IsotopeReactionContainer.png
+
 #begin Textures/Objects/Icons/Missile.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -409,6 +487,30 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/Icons/PowerfulBarrel.png
+
+#begin Textures/Objects/Icons/RapidFire.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/Icons/RapidFire.png
+
+#begin Textures/Objects/Icons/Shields.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/Icons/Shields.png
 
 #begin Textures/Objects/Icons/Ship.png
 /importer:TextureImporter
@@ -781,6 +883,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Spritesheets/UFO.png
+
+#begin Textures/UI/AbilityBorders.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/UI/AbilityBorders.png
 
 #begin Textures/UI/AsteroidEnvironmentIcon.png
 /importer:TextureImporter

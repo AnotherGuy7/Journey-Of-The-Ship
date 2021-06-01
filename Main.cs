@@ -37,6 +37,7 @@ namespace Journey_Of_The_Ship
         public static AnimationHandler animationHandler;
         public static SaveManager saveManager;
         public static MusicManager musicManager;
+        public static ShaderManager shaderManager;
         public static UIObject mainUI;     //The UI that is currently being shown to the player (that they can interact with. Title Screen, Modification Screen, etc.)
         public PlayerUI playerUI;
 
@@ -73,6 +74,7 @@ namespace Journey_Of_The_Ship
         private Texture2D fadeOutTexture;
         private ParallaxBackground parallax;
         private Vector2 screenOffset;
+        private RenderTarget2D renderTarget;
 
         public static string debugValue = "";
 
@@ -119,6 +121,8 @@ namespace Journey_Of_The_Ship
             mainUI = new TitleScreen();
             parallax = new ParallaxBackground();
             musicManager = new MusicManager();
+            shaderManager = new ShaderManager();
+            shaderManager.activeScreenShader = null;
             PlayerUI.InitializePlayerUI();
         }
 
@@ -126,6 +130,7 @@ namespace Journey_Of_The_Ship
         {
             animationHandler = new AnimationHandler();
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+            renderTarget = new RenderTarget2D(GraphicsDevice, actualResolutionWidth, actualResolutionHeight);
             mainFont = Content.Load<SpriteFont>("Fonts/MainFont");
             fadeOutTexture = Content.Load<Texture2D>("Textures/UI/ScreenFadeOut");
 
@@ -135,6 +140,9 @@ namespace Journey_Of_The_Ship
             Missile.missileTexture = Content.Load<Texture2D>("Textures/Spritesheets/Missile");
             Missile.targetLockedIndicator = Content.Load<Texture2D>("Textures/UI/TargetLockedIndicator");
             Laser.laserTexture = Content.Load<Texture2D>("Textures/Objects/Laser");
+            BlackHoleBomb.bombTexture = Content.Load<Texture2D>("Textures/Objects/BlackHoleBomb");
+            BlackHoleBomb.accretionDiskTexture = Content.Load<Texture2D>("Textures/Objects/AccretionDisk");
+
             UFO.ufoSpritesheet = Content.Load<Texture2D>("Textures/Spritesheets/UFO");
             Slicer.slicerSpritesheet = Content.Load<Texture2D>("Textures/Spritesheets/Slicer");
             Slicer.slicerAfterImageTexture = Content.Load<Texture2D>("Textures/Objects/SlicerAfterImage");
@@ -183,6 +191,11 @@ namespace Journey_Of_The_Ship
             PlayerUI.playerHealthOutlines = Content.Load<Texture2D>("Textures/UI/HealthBarOutlines");
             PlayerUI.clearEnvironmentIcon = Content.Load<Texture2D>("Textures/UI/ClearEnvironmentIcon");
             PlayerUI.asteroidEnvironmentIcon = Content.Load<Texture2D>("Textures/UI/AsteroidEnvironmentIcon");
+            PlayerUI.abilityIcons[0] = Content.Load<Texture2D>("Textures/Objects/Icons/RapidFire");
+            PlayerUI.abilityIcons[1] = Content.Load<Texture2D>("Textures/Objects/Icons/BlackHole");
+            PlayerUI.abilityIcons[2] = Content.Load<Texture2D>("Textures/Objects/Icons/BlackHole");
+            PlayerUI.abilityIcons[3] = Content.Load<Texture2D>("Textures/Objects/Icons/IsotopeReactionContainer");
+            PlayerUI.abilityBorder = Content.Load<Texture2D>("Textures/UI/AbilityBorders");
             WarningOverlay.warningOverlayTexture = Content.Load<Texture2D>("Textures/UI/AsteroidFieldWarningLines");
             WarningOverlay.warningOverlayMark = Content.Load<Texture2D>("Textures/UI/AsteroidFieldWarningMark");
             Button.menuStyleTop = Content.Load<Texture2D>("Textures/UI/ButtonOutlineTop");
@@ -206,6 +219,10 @@ namespace Journey_Of_The_Ship
             ModificationScreen.shipWings = Content.Load<Texture2D>("Textures/Objects/Icons/ShipWings");
             ModificationScreen.bulletTexture = Content.Load<Texture2D>("Textures/Objects/Icons/Bullet");
             ModificationScreen.missileTexture = Content.Load<Texture2D>("Textures/Objects/Icons/Missile");
+            ModificationScreen.rapidFireTexture = Content.Load<Texture2D>("Textures/Objects/Icons/RapidFire");
+            ModificationScreen.blackHoleTexture = Content.Load<Texture2D>("Textures/Objects/Icons/BlackHole");
+            ModificationScreen.shieldsTexture = Content.Load<Texture2D>("Textures/Objects/Icons/Shields");
+            ModificationScreen.isotopeReactionContainmentTexture = Content.Load<Texture2D>("Textures/Objects/Icons/IsotopeReactionContainer");
             ModificationScreen.modificationHangarTexture = Content.Load<Texture2D>("Textures/Backgrounds/ModificationHangar");
 
             Player.shootSound = Content.Load<SoundEffect>("Sounds/PlayerShoot");
@@ -213,9 +230,15 @@ namespace Journey_Of_The_Ship
             Explosion.explosionSound = Content.Load<SoundEffect>("Sounds/Explosion_3");
             UFO.shootSound = Content.Load<SoundEffect>("Sounds/UFOShoot");
             UFO.deathSound = Content.Load<SoundEffect>("Sounds/UFODying");
+            Slicer.slicerChargeUpSound = Content.Load<SoundEffect>("Sounds/SlicerChargeUp");
+            Slicer.slicerAirCutSound = Content.Load<SoundEffect>("Sounds/SlicerAirCuts");
+            BlackHoleBomb.blackHoleOpeningSound = Content.Load<SoundEffect>("Sounds/BlackHoleBombOpen");
+            BlackHoleBomb.blackHoleActiveSound = Content.Load<SoundEffect>("Sounds/BlackHoleBombActive");
             Stasis.beamSound = Content.Load<SoundEffect>("Sounds/StasisBeam");
             MusicManager.titleMusic = Content.Load<Song>("Sounds/Music/JotS_Title");
             MusicManager.mainMusic = Content.Load<Song>("Sounds/Music/JotS_Main");
+
+            ShaderManager.blackHoleShader = Content.Load<Effect>("Shaders/BlackHoleShader");
         }
 
         protected override void Update(GameTime gameTime)
@@ -242,11 +265,13 @@ namespace Journey_Of_The_Ship
 
             animationHandler.Update();
             musicManager.UpdateMusic();
+            shaderManager.Update();
             switch (gameState)
             {
                 case GameStates.GameState_Title:
                     parallax.Update();
                     mainUI.Update();
+                    //shaderManager.ActivateBlackHoleShader(0.1f, mousePosition);
                     break;
                 case GameStates.GameState_Playing:
                     parallax.Update();
@@ -313,7 +338,9 @@ namespace Journey_Of_The_Ship
             //SamplerState Point Clamp: No blur effects are added, things drawn in this batch will keep their pixelated effect
             //DepthStencilState None: Doesn't use the depth stencil (Which keeps track of the depth of pixels in the screen, useful for 3D)
             //RasterizerState Cull Counter Clockwise: As far as I know, gets 3D points and converts them into shapes then pixels for easy image representation
-            _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, transformMatrix: screenMatrix);
+            GraphicsDevice.SetRenderTarget(renderTarget);
+            GraphicsDevice.Clear(Color.Black);
+            _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, screenMatrix);
 
             switch (gameState)
             {
@@ -370,6 +397,12 @@ namespace Journey_Of_The_Ship
             }
             _spriteBatch.End();
 
+            GraphicsDevice.SetRenderTarget(null);
+            GraphicsDevice.Clear(Color.Black);
+            _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, shaderManager.activeScreenShader);
+            _spriteBatch.Draw(renderTarget, Vector2.Zero, Color.White);
+            _spriteBatch.End();
+
         }
 
         public static void FadeIn(int duration)
@@ -413,7 +446,10 @@ namespace Journey_Of_The_Ship
 
         public static void StartScreenShake(int duration, int intensity)
         {
-            screenShakeDuration += duration;
+            if (screenShakeDuration > 0)
+                return;
+
+            screenShakeDuration = duration;
             screenShakeIntensity = intensity;
         }
 

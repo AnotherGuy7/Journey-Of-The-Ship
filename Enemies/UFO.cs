@@ -12,6 +12,7 @@ namespace Journey_Of_The_Ship.Enemies
     {
         public override CollisionType[] colliderTypes => new CollisionType[1] { CollisionType.Projectiles };
         public override CollisionType collisionType => CollisionType.Enemies;
+        public override int AmountOfHealth => 3;
 
         public static Texture2D ufoSpritesheet;
         public static SoundEffect shootSound;
@@ -33,7 +34,6 @@ namespace Journey_Of_The_Ship.Enemies
         private Vector2 shootOffset = new Vector2(12f, 24f);
         private Vector2 rumbleOffset;
         private Vector2 deathVelocity;
-        private int health = 3;
         private Rectangle animRect;
         private bool playedSound = false;
 
@@ -42,6 +42,7 @@ namespace Journey_Of_The_Ship.Enemies
             UFO currentInstance = new UFO();
             currentInstance.position = position;
             currentInstance.hitbox = new Rectangle((int)currentInstance.position.X, (int)currentInstance.position.Y, currentInstance.Width, currentInstance.Height);
+            currentInstance.health = currentInstance.AmountOfHealth;
             Main.activeEntities.Add(currentInstance);
         }
 

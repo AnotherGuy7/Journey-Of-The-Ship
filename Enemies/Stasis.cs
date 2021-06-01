@@ -12,6 +12,7 @@ namespace Journey_Of_The_Ship.Enemies
     {
         public override CollisionType[] colliderTypes => new CollisionType[1] { CollisionType.Projectiles };
         public override CollisionType collisionType => CollisionType.Enemies;
+        public override int AmountOfHealth => 1;
 
         public static Texture2D stabilizerSpritesheet;
         public static SoundEffect beamSound;
@@ -22,7 +23,6 @@ namespace Journey_Of_The_Ship.Enemies
         private int frame = 0;
         private int frameCounter = 0;
         private Vector2 shootOffset = new Vector2(5f, 9f);
-        private int health = 2;
         private int beamDurationTimer = 0;
         private int beamChargeUpTimer = 0;
         private bool shootingBeam = false;
@@ -35,6 +35,7 @@ namespace Journey_Of_The_Ship.Enemies
             Stasis currentInstance = new Stasis();
             currentInstance.position = position;
             currentInstance.hitbox = new Rectangle((int)currentInstance.position.X, (int)currentInstance.position.Y, currentInstance.Width, currentInstance.Height);
+            currentInstance.health = currentInstance.AmountOfHealth;
             Main.activeEntities.Add(currentInstance);
         }
 

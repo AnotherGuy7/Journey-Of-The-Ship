@@ -2,6 +2,7 @@
 using Journey_Of_The_Ship.Obstacles;
 using Journey_Of_The_Ship.Projectiles;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +13,12 @@ namespace Journey_Of_The_Ship.Enemies
     {
         public override CollisionType[] colliderTypes => new CollisionType[2] { CollisionType.Player, CollisionType.Projectiles };
         public override CollisionType collisionType => CollisionType.Enemies;
+        public override int AmountOfHealth => 1;
 
         public static Texture2D slicerSpritesheet;
         public static Texture2D slicerAfterImageTexture;
+        public static SoundEffect slicerAirCutSound;
+        public static SoundEffect slicerChargeUpSound;
 
         public override int Width => 23;
         public override int Height => 23;
@@ -24,7 +28,6 @@ namespace Journey_Of_The_Ship.Enemies
         private const float SlicerDetectionRange = 50f;
 
         private int frame = 0;
-        private int health = 1;
         private Rectangle animRect;
         private Vector2 velocity;
         private float rotation = 0f;
@@ -33,6 +36,7 @@ namespace Journey_Of_The_Ship.Enemies
         private int dashChargeTimer = 0;
         private bool playerDetected = false;
         private bool dashing = false;
+        private int slicerAirCutTimer = 0;
         private Vector2 dashVelocity;
         private List<Vector2> afterImagePositions = new List<Vector2>();
         private List<float> afterImageAlpha = new List<float>();
@@ -44,6 +48,7 @@ namespace Journey_Of_The_Ship.Enemies
             currentInstance.position = position;
             currentInstance.hitbox = new Rectangle((int)currentInstance.position.X, (int)currentInstance.position.Y, currentInstance.Width, currentInstance.Height);
             currentInstance.velocity = new Vector2(0f, 0.3f);
+            currentInstance.health = currentInstance.AmountOfHealth;
             Main.activeEntities.Add(currentInstance);
         }
 
@@ -73,6 +78,10 @@ namespace Journey_Of_The_Ship.Enemies
                     dashVelocity.Normalize();
                     dashVelocity *= 1.3f;
                 }
+                if (dashChargeTimer == 1)
+                {
+                    slicerChargeUpSound.Play();
+                }
             }
             else
             {
@@ -83,6 +92,12 @@ namespace Journey_Of_The_Ship.Enemies
                 dashTimer++;
                 rotationToAdd = dashChargeTimer / 680f;
                 velocity = dashVelocity;
+
+                slicerAirCutTimer++;
+                if (slicerAirCutTimer >= 11)
+                {
+                    slicerAirCutSound.Play();
+                }
             }
 
             position += velocity;

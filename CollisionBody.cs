@@ -6,6 +6,7 @@ namespace Journey_Of_The_Ship
 {
     public abstract class CollisionBody
     {
+        public Vector2 position;
         public Rectangle hitbox;
 
         /// <summary>
@@ -20,6 +21,7 @@ namespace Journey_Of_The_Ship
 
         public enum CollisionType
         {
+            None,
             Player,
             Enemies,
             Obstacles,

@@ -25,6 +25,7 @@ namespace Journey_Of_The_Ship
         public static WingTypes wingType = WingTypes.Normal;
         public static PropellerType propellerType = PropellerType.Normal;
         public static AmmoType ammoType = AmmoType.Bullets;
+        public static AbilityType abilityType = AbilityType.None;
 
         private const int PlayerWidth = 21;
         private const int PlayerHeight = 19;
@@ -34,7 +35,6 @@ namespace Journey_Of_The_Ship
         private const int DashCooldownTime = 120;
         private const int RapidFireAbility = 0;
 
-        public Vector2 position;
         public bool canMove = false;
 
         private float shootSpeed = 2f;
@@ -48,8 +48,12 @@ namespace Journey_Of_The_Ship
         private int stunTimer = 0;
         private bool dying = false;
         private Rectangle animationRect;
-        private bool[] abilityActive = new bool[1];
-        private int[] abilityDurations = new int[1];
+        private bool abilityActive = false;
+        private int abilityDuration = 0;
+        private int abilityActiveTime = 0;
+        private bool abilityShotOnce = false;
+        public int killsNeededForAbility = 0;
+        public int killsNeededRequirement = 0;
 
         private int dashTimer = 0;
         private int dashCooldown = 0;
@@ -88,6 +92,15 @@ namespace Journey_Of_The_Ship
             Missiles
         }
 
+        public enum AbilityType
+        {
+            None,
+            RapidFire,
+            BlackHole,
+            Shields,
+            IsotopeReactionContainment
+        }
+
         public override void Initialize()
         {
             dying = false;
@@ -105,6 +118,27 @@ namespace Journey_Of_The_Ship
             else if (turretType == TurretTypes.Powerful)
             {
 
+            }
+
+            if (abilityType == AbilityType.RapidFire)
+            {
+                killsNeededRequirement = 20;
+                abilityActiveTime = 25 * 60;
+            }
+            else if (abilityType == AbilityType.BlackHole)
+            {
+                killsNeededRequirement = 35;
+                abilityActiveTime = (15 * 60) - 2;
+            }
+            else if (abilityType == AbilityType.Shields)
+            {
+                killsNeededRequirement = 15;
+                abilityActiveTime = 30 * 60;
+            }
+            else if (abilityType == AbilityType.IsotopeReactionContainment)
+            {
+                killsNeededRequirement = 15;
+                abilityActiveTime = 40 * 60;
             }
         }
 
@@ -152,6 +186,12 @@ namespace Journey_Of_The_Ship
                 {
                     Shoot();
                     shootSound.Play(Main.soundEffectVolume, Main.random.Next(0, 101) / 100f, 0f);
+                }
+                if (keyboardState.IsKeyDown(Keys.E) && killsNeededForAbility <= 0)
+                {
+                    abilityActive = true;
+                    abilityDuration = abilityActiveTime;
+                    killsNeededForAbility = killsNeededRequirement;
                 }
                 UpdatePlayerDash(keyboardState, velocity);
             }
@@ -201,7 +241,7 @@ namespace Journey_Of_The_Ship
         {
             Vector2 shootPos = position;
 
-            if (abilityActive[RapidFireAbility])
+            if (abilityType == AbilityType.RapidFire && abilityActive)
             {
                 shootTimer += 3;
                 Main.StartScreenShake(1, 1);
@@ -407,17 +447,35 @@ namespace Journey_Of_The_Ship
 
         private void HandleAbilities()
         {
-            for (int i = 0; i < abilityActive.Length; i++)
+            if (killsNeededForAbility <= 0)
             {
-                if (abilityActive[i])
-                {
-                    abilityDurations[i]--;
-                    if (abilityDurations[i] <= 0)
-                    {
-                        abilityActive[i] = false;
-                    }
-                }
+                killsNeededForAbility = 0;
             }
+
+            if (!abilityActive)
+                return;
+
+            if (abilityDuration > 0)
+            {
+                abilityDuration--;
+            }
+            else
+            {
+                abilityActive = false;
+                abilityShotOnce = false;
+            }
+
+            switch (abilityType)
+            {
+                case AbilityType.BlackHole:
+                    if (!abilityShotOnce)
+                    {
+                        BlackHoleBomb.NewBlackHoleBomb(position, new Vector2(0f, -0.15f), true);
+                        abilityShotOnce = true;
+                    }
+                    break;
+            }
+
         }
 
         public override void HandleCollisions(CollisionBody collider, CollisionType colliderType)
@@ -442,7 +500,7 @@ namespace Journey_Of_The_Ship
                 }
                 powerUp.DestoryInstance(powerUp);
             }
-            if (collider is AbilityDrop)
+            /*if (collider is AbilityDrop)
             {
                 AbilityDrop abilityDrop = collider as AbilityDrop;
                 switch (abilityDrop.abilityType)
@@ -453,9 +511,12 @@ namespace Journey_Of_The_Ship
                         break;
                 }
                 abilityDrop.DestoryInstance(abilityDrop);
-            }
+            }*/
 
             if (immunityCounter > 0)
+                return;
+
+            if (abilityActive && abilityType == AbilityType.Shields)
                 return;
 
             if (collider is Projectile)

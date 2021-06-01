@@ -12,6 +12,10 @@ namespace Journey_Of_The_Ship.UI
         public static Texture2D shipWings;
         public static Texture2D bulletTexture;
         public static Texture2D missileTexture;
+        public static Texture2D rapidFireTexture;
+        public static Texture2D blackHoleTexture;
+        public static Texture2D shieldsTexture;
+        public static Texture2D isotopeReactionContainmentTexture;
         public static Texture2D modificationHangarTexture;
 
         private TextureCollisionButton shipBarrelsButton;
@@ -23,7 +27,7 @@ namespace Journey_Of_The_Ship.UI
         public static Texture2D extendedBarrelTexture;
         public static Texture2D powerfulBarrelTexture;
         private Texture2D[] turretModTextures = new Texture2D[3];
-        public string[] turretModLabels = new string[3] { "Normal", "Longer Cannon Barrels", "More Powerful Barrels" };
+        private string[] turretModLabels = new string[3] { "Normal", "Longer Cannon Barrels", "More Powerful Barrels" };
         private ButtonList turretModList;
 
         public static Texture2D normalWingsTexture;
@@ -31,12 +35,16 @@ namespace Journey_Of_The_Ship.UI
         public static Texture2D hoverEquippedWingsTexture;
         public static Texture2D chargedWingsTexture;
         private Texture2D[] wingModTextures = new Texture2D[4];
-        public string[] wingModLabels = new string[4] { "Normal", "Thin Cut Wings", "Hover Equipped Wings", "ChargedWings" };
+        private string[] wingModLabels = new string[4] { "Normal", "Thin Cut Wings", "Hover Equipped Wings", "ChargedWings" };
         private ButtonList wingModList;
 
         private Button startButton;
         private Button bulletsButton;
         private Button missilesButton;
+        private Button rapidFireButton;
+        private Button blackHoleButton;
+        private Button shieldsButton;
+        private Button icrButton;
 
         private bool pressedBackToTitle = false;
         private bool pressedStartButton = false;
@@ -77,6 +85,10 @@ namespace Journey_Of_The_Ship.UI
 
             bulletsButton = new Button(bulletTexture, new Vector2(30f, Main.desiredResolutionHeight - 18f), Color.White, Color.Orange, 0.6f, 0.65f, 1);
             missilesButton = new Button(missileTexture, bulletsButton.buttonPosition + new Vector2(16f, 0f), Color.White, Color.Orange, 0.6f, 0.65f, 1);
+            rapidFireButton = new Button(rapidFireTexture, new Vector2(40f, Main.desiredResolutionHeight - 38f), Color.White, Color.Orange, 0.6f, 0.65f, 1);
+            blackHoleButton = new Button(blackHoleTexture, rapidFireButton.buttonPosition + new Vector2(16f, 0f), Color.White, Color.Orange, 0.6f, 0.65f, 1);
+            shieldsButton = new Button(shieldsTexture, blackHoleButton.buttonPosition + new Vector2(16f, 0f), Color.White, Color.Orange, 0.6f, 0.65f, 1);
+            icrButton = new Button(isotopeReactionContainmentTexture, shieldsButton.buttonPosition + new Vector2(16f, 0f), Color.White, Color.Orange, 0.6f, 0.65f, 1);
         }
 
         public override void Update()
@@ -89,6 +101,10 @@ namespace Journey_Of_The_Ship.UI
             startButton.Update();
             bulletsButton.Update();
             missilesButton.Update();
+            rapidFireButton.Update();
+            blackHoleButton.Update();
+            shieldsButton.Update();
+            icrButton.Update();
 
             HandleButtonInputs();
 
@@ -156,6 +172,39 @@ namespace Journey_Of_The_Ship.UI
                 bulletsButton.focused = false;
                 missilesButton.focused = true;
             }
+            if (rapidFireButton.buttonPressed)
+            {
+                Player.abilityType = Player.AbilityType.RapidFire;
+                rapidFireButton.focused = true;
+                blackHoleButton.focused = false;
+                shieldsButton.focused = false;
+                icrButton.focused = false;
+            }
+            if (blackHoleButton.buttonPressed)
+            {
+                Player.abilityType = Player.AbilityType.BlackHole;
+                rapidFireButton.focused = false;
+                blackHoleButton.focused = true;
+                shieldsButton.focused = false;
+                icrButton.focused = false;
+            }
+            if (shieldsButton.buttonPressed)
+            {
+                Player.abilityType = Player.AbilityType.Shields;
+                rapidFireButton.focused = false;
+                blackHoleButton.focused = false;
+                shieldsButton.focused = true;
+                icrButton.focused = false;
+            }
+            if (icrButton.buttonPressed)
+            {
+                Player.abilityType = Player.AbilityType.Shields;
+                rapidFireButton.focused = false;
+                blackHoleButton.focused = false;
+                shieldsButton.focused = false;
+                icrButton.focused = true;
+            }
+
 
             if (turretModList.expanded)
             {
@@ -193,8 +242,13 @@ namespace Journey_Of_The_Ship.UI
             startButton.Draw(spriteBatch);
             bulletsButton.Draw(spriteBatch);
             missilesButton.Draw(spriteBatch);
+            rapidFireButton.Draw(spriteBatch);
+            blackHoleButton.Draw(spriteBatch);
+            shieldsButton.Draw(spriteBatch);
+            icrButton.Draw(spriteBatch);
 
             spriteBatch.DrawString(Main.mainFont, "Ammo:", new Vector2(3f, Main.desiredResolutionHeight - 20f), Color.White, 0f, Vector2.Zero, 0.5f, SpriteEffects.None, 0f);
+            spriteBatch.DrawString(Main.mainFont, "Ability:", new Vector2(3f, Main.desiredResolutionHeight - 40f), Color.White, 0f, Vector2.Zero, 0.5f, SpriteEffects.None, 0f);
         }
 
         private void DrawLayeredShip(SpriteBatch spriteBatch)       //Probably not the best way to do it, but whatever

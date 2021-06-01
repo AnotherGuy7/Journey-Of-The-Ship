@@ -9,6 +9,8 @@ namespace Journey_Of_The_Ship.UI
         public static Texture2D playerHealthMark;
         public static Texture2D clearEnvironmentIcon;
         public static Texture2D asteroidEnvironmentIcon;
+        public static Texture2D[] abilityIcons = new Texture2D[4];
+        public static Texture2D abilityBorder;
         public static float uiAlpha = 0f;
 
         private Vector2 scorePosition = new Vector2(1f, 1f);
@@ -20,6 +22,7 @@ namespace Journey_Of_The_Ship.UI
         private Color healthRed = new Color(246, 103, 103);
 
         private Color healthMarkDrawColor = Color.White;
+        private Color abilityDrawColor = Color.White;
 
         public static void InitializePlayerUI()
         {
@@ -32,6 +35,9 @@ namespace Journey_Of_The_Ship.UI
             healthMarkDrawColor.R = (byte)MathHelper.Lerp(healthGreen.R, healthRed.R, 1f - (Main.playerHealth / 6f));
             healthMarkDrawColor.G = (byte)MathHelper.Lerp(healthGreen.G, healthRed.G, 1f - (Main.playerHealth / 6f));
             healthMarkDrawColor.B = (byte)MathHelper.Lerp(healthGreen.B, healthRed.B, 1f - (Main.playerHealth / 6f));
+
+            float fadeColor = MathHelper.Lerp(0f, 1f, (float)(Main.player.killsNeededForAbility / Main.player.killsNeededRequirement));
+            abilityDrawColor = new Color(fadeColor, fadeColor, fadeColor);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -45,6 +51,15 @@ namespace Journey_Of_The_Ship.UI
             }
 
             spriteBatch.DrawString(Main.mainFont, "Score: " + Main.gameScore, scorePosition, Color.White * uiAlpha, 0f, Vector2.Zero, 0.7f, SpriteEffects.None, 0f);
+
+            if (Player.abilityType != Player.AbilityType.None)
+            {
+                Vector2 abilityIconPosition = new Vector2(Main.desiredResolutionWidth - 22f, Main.desiredResolutionHeight - 22f);
+                Vector2 abilityIconCenter = abilityIconPosition + new Vector2(abilityBorder.Width / 2f, abilityBorder.Height / 2f);
+                spriteBatch.Draw(abilityBorder, abilityIconPosition, Color.White);
+                spriteBatch.Draw(abilityIcons[(int)Player.abilityType - 1], abilityIconCenter, null, abilityDrawColor, 0f, new Vector2(10f, 10f), 1f, SpriteEffects.None, 0f);
+                spriteBatch.DrawString(Main.mainFont, Main.player.killsNeededForAbility.ToString(), abilityIconCenter, Color.White * uiAlpha, 0f, new Vector2(10f, 10f), 0.3f, SpriteEffects.None, 0f);
+            }
 
             DrawEnvironmentalIcon(spriteBatch);
         }
