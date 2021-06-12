@@ -24,7 +24,7 @@ namespace Journey_Of_The_Ship
             if (activeScreenShader != null)
             {
                 time += 0.01f;
-                //activeScreenShader.Parameters["time"].SetValue(time);
+                ////activeScreenShader.Parameters["time"].SetValue(time);
                 activeScreenShader.Parameters["resolution"].SetValue(new Vector2(Main.desiredResolutionWidth, Main.desiredResolutionHeight));
             }
             else

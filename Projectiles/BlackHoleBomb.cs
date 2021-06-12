@@ -50,9 +50,9 @@ namespace Journey_Of_The_Ship.Projectiles
                 Main.shaderManager.DisableScreenShaders();
                 return;
             }
-            float strength = (1f - MathHelper.Clamp(Vector2.Distance(position, Main.player.position) / Main.desiredResolutionWidth, 0f, 1f)) * 0.1f;
+            float strength = 0.01f;
             Vector2 center = position + new Vector2(BombWidth / 2f, BombHeight / 2f);
-            float distance = (1f - MathHelper.Clamp(Vector2.Distance(position, Main.player.position) / Main.desiredResolutionWidth, 0f, 1f)) * 0.4f;
+            float distance = 0.13f;
             Main.shaderManager.ActivateBlackHoleShader(strength, center, distance);
             if (lifeTimer > 2 * 60 && !playedOpeningSound)
             {

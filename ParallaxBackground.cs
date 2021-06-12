@@ -12,20 +12,35 @@ namespace Journey_Of_The_Ship
         public int backGroundType = 0;
 
         private Texture2D[] parallaxBackgrounds = new Texture2D[2];
+        private Vector2 backgroundPositions = new Vector2(-5f, -5f);
         private Vector2 backgroundPosition = new Vector2(-5f, -5f);
         private Vector2 secondBackgroundPosition = new Vector2(-5f, -5f);
 
         public ParallaxBackground()
         {
             parallaxBackgrounds = spaceSet1;
+            backgroundPositions = new Vector2(-5f, -5f);
             backgroundPosition = new Vector2(-5f, -5f);
             secondBackgroundPosition = new Vector2(-5f, -5f - parallaxBackgrounds[1].Height);
         }
 
         public void Update()
         {
-            backgroundPosition.Y += parallaxStrength;
+            /*backgroundPosition.Y += parallaxStrength;
             secondBackgroundPosition.Y += parallaxStrength;
+
+            if (backgroundPosition.Y > parallaxBackgrounds[0].Height + 5f)
+            {
+                backgroundPosition = new Vector2(-5f, -5f - parallaxBackgrounds[0].Height);
+            }
+            if (secondBackgroundPosition.Y > parallaxBackgrounds[1].Height + 5f)
+            {
+                secondBackgroundPosition = new Vector2(-5f, -5f - parallaxBackgrounds[1].Height);
+            }*/
+
+            backgroundPositions.Y += parallaxStrength;
+            backgroundPosition = backgroundPositions;
+            secondBackgroundPosition = backgroundPositions - new Vector2(0f, parallaxBackgrounds[1].Height);
 
             if (backgroundPosition.Y > parallaxBackgrounds[0].Height + 5f)
             {
