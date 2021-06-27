@@ -11,8 +11,8 @@ namespace Journey_Of_The_Ship.Enemies
 {
     public class Slicer : Enemy
     {
-        public override CollisionType[] colliderTypes => new CollisionType[2] { CollisionType.Player, CollisionType.Projectiles };
         public override CollisionType collisionType => CollisionType.Enemies;
+        public override CollisionType[] colliderTypes => new CollisionType[2] { CollisionType.Player, CollisionType.FriendlyProjectiles };
         public override int AmountOfHealth => 1;
 
         public static Texture2D slicerSpritesheet;
@@ -124,12 +124,9 @@ namespace Journey_Of_The_Ship.Enemies
             if (collider is Projectile)
             {
                 Projectile collidingProjectile = collider as Projectile;
-                if (collidingProjectile.friendly)
-                {
-                    health -= 1;
-                    Explosion.NewExplosion(collidingProjectile.position, Vector2.Zero);
-                    collidingProjectile.DestroyInstance(collidingProjectile);
-                }
+                health -= 1;
+                Explosion.NewExplosion(collidingProjectile.position, Vector2.Zero);
+                collidingProjectile.DestroyInstance(collidingProjectile);
             }
             if (collider is Asteroid)
             {

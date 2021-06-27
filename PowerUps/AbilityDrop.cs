@@ -5,8 +5,8 @@ namespace Journey_Of_The_Ship.PowerUps
 {
     public class AbilityDrop : CollisionBody
     {
+        public override CollisionType collisionType => CollisionType.None;
         public override CollisionType[] colliderTypes => new CollisionType[1] { CollisionType.Player };
-        public override CollisionType collisionType => CollisionType.PowerUp;
 
         public static Texture2D[] abilityTextures = new Texture2D[1];
         public static Texture2D abilityRect;
@@ -14,7 +14,6 @@ namespace Journey_Of_The_Ship.PowerUps
         public const int RapidFire = 0;
 
         private Texture2D texture;
-        private Vector2 position;
         private Vector2 velocity;
         private Color rectColor;
         private float scale = 1f;

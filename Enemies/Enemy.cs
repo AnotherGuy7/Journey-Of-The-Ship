@@ -55,7 +55,9 @@ namespace Journey_Of_The_Ship.Enemies
             if (addPoint)
                 Main.gameScore += 1;
 
-            Main.player.killsNeededForAbility -= 1;
+            if (Main.player.abilityDuration <= 0)
+                Main.player.killsNeededForAbility -= 1;
+
             Main.activeEntities.Remove(enemy);
         }
     }

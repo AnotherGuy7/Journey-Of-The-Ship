@@ -10,8 +10,8 @@ namespace Journey_Of_The_Ship.Enemies
 {
     public class UFO : Enemy
     {
-        public override CollisionType[] colliderTypes => new CollisionType[1] { CollisionType.Projectiles };
         public override CollisionType collisionType => CollisionType.Enemies;
+        public override CollisionType[] colliderTypes => new CollisionType[1] { CollisionType.FriendlyProjectiles };
         public override int AmountOfHealth => 3;
 
         public static Texture2D ufoSpritesheet;
@@ -77,7 +77,7 @@ namespace Journey_Of_The_Ship.Enemies
             if (shootCounter >= 4 * 60 && health > 0)
             {
                 shootSound.Play(Main.soundEffectVolume, Main.random.Next(0, 101) / 100f, 0f);
-                Laser.NewLaser(position + shootOffset, shootVelocity, false);
+                Laser.NewLaser(position + shootOffset, shootVelocity);
                 shootCounter = 0;
             }
 
@@ -86,8 +86,6 @@ namespace Journey_Of_The_Ship.Enemies
                 deathTimer++;
                 if (deathTimer >= 80)
                 {
-                    DropAbilities(100, new Vector2(Width / 2f, Height / 2f));
-                    DropPowerUp(8, new Vector2(Width / 2f, Height / 2f));
                     SpawnGore(Main.random.Next(0, 1 + 1), Width, Height, 4);
                     Explosion.NewExplosion(position + new Vector2(Width / 2f, Height / 2f), Vector2.Zero);
                     Main.StartScreenShake(8, 1);
@@ -106,16 +104,13 @@ namespace Journey_Of_The_Ship.Enemies
             if (collider is Projectile)
             {
                 Projectile collidingProjectile = collider as Projectile;
-                if (collidingProjectile.friendly)
+                health -= 1;
+                if (deathTimer > 0)
                 {
-                    health -= 1;
-                    if (deathTimer > 0)
-                    {
-                        deathTimer = 80;
-                    }
-                    Explosion.NewExplosion(collidingProjectile.position, Vector2.Zero);
-                    collidingProjectile.DestroyInstance(collidingProjectile);
+                    deathTimer = 80;
                 }
+                Explosion.NewExplosion(collidingProjectile.position, Vector2.Zero);
+                collidingProjectile.DestroyInstance(collidingProjectile);
             }
             if (collider is Asteroid)
             {

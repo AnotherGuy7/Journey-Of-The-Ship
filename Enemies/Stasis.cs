@@ -10,8 +10,8 @@ namespace Journey_Of_The_Ship.Enemies
 {
     public class Stasis : Enemy
     {
-        public override CollisionType[] colliderTypes => new CollisionType[1] { CollisionType.Projectiles };
         public override CollisionType collisionType => CollisionType.Enemies;
+        public override CollisionType[] colliderTypes => new CollisionType[1] { CollisionType.FriendlyProjectiles };
         public override int AmountOfHealth => 1;
 
         public static Texture2D stabilizerSpritesheet;
@@ -125,24 +125,21 @@ namespace Journey_Of_The_Ship.Enemies
             if (collider is Projectile)
             {
                 Projectile collidingProjectile = collider as Projectile;
-                if (collidingProjectile.friendly)
+                health -= 1;
+                if (health <= 0)
                 {
-                    health -= 1;
-                    if (health <= 0)
+                    DropPowerUp(1, new Vector2(Width / 2f, Height / 2f));
+                    SpawnGore(Main.random.Next(8, 10 + 1), Width, Height, Main.random.Next(1, 2 + 1));
+                    GenerateSmoke(Color.Orange, Color.Gray, Width, Height, 16);
+                    if (beam != null)
                     {
-                        DropPowerUp(1, new Vector2(Width / 2f, Height / 2f));
-                        SpawnGore(Main.random.Next(8, 10 + 1), Width, Height, Main.random.Next(1, 2 + 1));
-                        GenerateSmoke(Color.Orange, Color.Gray, Width, Height, 16);
-                        if (beam != null)
-                        {
-                            beam.DestroyInstance(beam);
-                            beam = null;
-                        }
-                        DestroyInstance(this);
+                        beam.DestroyInstance(beam);
+                        beam = null;
                     }
-                    Explosion.NewExplosion(collidingProjectile.position, Vector2.Zero);
-                    collidingProjectile.DestroyInstance(collidingProjectile);
+                    DestroyInstance(this);
                 }
+                Explosion.NewExplosion(collidingProjectile.position, Vector2.Zero);
+                collidingProjectile.DestroyInstance(collidingProjectile);
             }
             if (collider is Asteroid)
             {

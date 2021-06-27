@@ -14,8 +14,8 @@ namespace Journey_Of_The_Ship
 {
     public class Player : CollisionBody
     {
-        public override CollisionType[] colliderTypes => new CollisionType[4] { CollisionType.Enemies, CollisionType.Obstacles, CollisionType.PowerUp, CollisionType.Projectiles };
         public override CollisionType collisionType => CollisionType.Player;
+        public override CollisionType[] colliderTypes => new CollisionType[3] { CollisionType.Enemies, CollisionType.Obstacles, CollisionType.EnemyProjectiles };
 
         public static Texture2D playerSpritesheet;
         public static Texture2D playerAfterImageTexture;
@@ -33,9 +33,11 @@ namespace Journey_Of_The_Ship
         private const int DashDetectionTime = 5;
         private const int DashDurationTime = 10;
         private const int DashCooldownTime = 120;
-        private const int RapidFireAbility = 0;
 
         public bool canMove = false;
+        public int killsNeededForAbility = 0;
+        public int killsNeededRequirement = 0;
+        public int abilityDuration = 0;
 
         private float shootSpeed = 2f;
         private int shootTimer = 0;
@@ -49,11 +51,8 @@ namespace Journey_Of_The_Ship
         private bool dying = false;
         private Rectangle animationRect;
         private bool abilityActive = false;
-        private int abilityDuration = 0;
         private int abilityActiveTime = 0;
         private bool abilityShotOnce = false;
-        public int killsNeededForAbility = 0;
-        public int killsNeededRequirement = 0;
 
         private int dashTimer = 0;
         private int dashCooldown = 0;
@@ -328,15 +327,15 @@ namespace Journey_Of_The_Ship
             }
         }
 
-        private void SpawnProjectile(Vector2 position, Vector2 velocity, bool friendly = true)
+        private void SpawnProjectile(Vector2 position, Vector2 velocity)
         {
             if (ammoType == AmmoType.Bullets)
             {
-                Bullet.NewBullet(position, velocity, friendly);
+                Bullet.NewBullet(position, velocity);
             }
             else if (ammoType == AmmoType.Missiles)
             {
-                Missile.NewMissile(position, velocity, friendly);
+                Missile.NewMissile(position, velocity);
             }
         }
 
@@ -470,7 +469,7 @@ namespace Journey_Of_The_Ship
                 case AbilityType.BlackHole:
                     if (!abilityShotOnce)
                     {
-                        BlackHoleBomb.NewBlackHoleBomb(position, new Vector2(0f, -0.15f), true);
+                        BlackHoleBomb.NewBlackHoleBomb(position, new Vector2(0f, -0.15f));
                         abilityShotOnce = true;
                     }
                     break;
@@ -522,9 +521,6 @@ namespace Journey_Of_The_Ship
             if (collider is Projectile)
             {
                 Projectile collidingProjectile = collider as Projectile;
-
-                if (collidingProjectile.friendly)
-                    return;
 
                 if (!collidingProjectile.continuous)
                 {

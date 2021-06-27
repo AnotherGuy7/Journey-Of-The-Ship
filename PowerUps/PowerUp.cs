@@ -7,8 +7,8 @@ namespace Journey_Of_The_Ship.PowerUps
 {
     public class PowerUp : CollisionBody
     {
+        public override CollisionType collisionType => CollisionType.None;
         public override CollisionType[] colliderTypes => new CollisionType[1] { CollisionType.Player };
-        public override CollisionType collisionType => CollisionType.PowerUp;
 
         public static Texture2D[] powerUpTextures = new Texture2D[4];
         public static Texture2D powerUpAura;
@@ -19,7 +19,6 @@ namespace Journey_Of_The_Ship.PowerUps
         public const int Speed = 2;
 
         private Texture2D texture;
-        private Vector2 position;
         private Vector2 velocity;
         private Color auraColor;
         private float scale = 1f;

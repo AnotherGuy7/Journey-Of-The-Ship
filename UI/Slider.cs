@@ -1,9 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Journey_Of_The_Ship.UI
 {
@@ -18,17 +15,17 @@ namespace Journey_Of_The_Ship.UI
 
         public string sliderName = "";
         public Color drawColor;
-        public Vector2 sliderPosition;
-        public Vector2 screenPosition;
-        public Vector2 relativePosition;
+        public Vector2 sliderPosition;      //Position of the actual slider button
+        public Vector2 screenPosition;      //Position of the whole bar
+        public Vector2 relativePosition;    //Position of the whole bar in relation to it's parent
         public Rectangle rect;
 
-        public Slider(Vector2 pos, int width, int height, Color color, string label = "", float defaultValue = -1f, int sliderInteractionLayer = 1)
+        public Slider(Vector2 relativePos, int width, int height, Color color, string label = "", float defaultValue = -1f, int sliderInteractionLayer = 1)
         {
-            relativePosition = pos;
-            rect = new Rectangle((int)pos.X, (int)pos.Y, width, height);
+            relativePosition = relativePos;
+            rect = new Rectangle((int)relativePos.X, (int)relativePos.Y, width, height);
             drawColor = color;
-            sliderPosition.Y = pos.Y + (height / 2f);
+            sliderPosition.Y = relativePos.Y + (height / 2f);
             sliderName = label + ":";
             interactionLayer = sliderInteractionLayer;
             if (defaultValue != -1f)
@@ -65,7 +62,7 @@ namespace Journey_Of_The_Ship.UI
 
         public void SetValue(float sliderValue)
         {
-            sliderPosition.X = screenPosition.X + (rect.Width * sliderValue);
+            sliderPosition.X = relativePosition.X + (rect.Width * sliderValue);
             value = sliderValue;
         }
 
@@ -103,7 +100,7 @@ namespace Journey_Of_The_Ship.UI
             {
                 float scale = 0.4f;
                 Vector2 textSize = Main.mainFont.MeasureString(sliderName) * scale;
-                spriteBatch.DrawString(Main.mainFont, sliderName, screenPosition - textSize - new Vector2(1f, 0f), drawColor, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+                spriteBatch.DrawString(Main.mainFont, sliderName, screenPosition - new Vector2(textSize.X + 1f, 0f), drawColor, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
             }
         }
     }

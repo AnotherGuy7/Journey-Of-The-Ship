@@ -132,109 +132,109 @@ namespace Journey_Of_The_Ship
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             renderTarget = new RenderTarget2D(GraphicsDevice, actualResolutionWidth, actualResolutionHeight);
             mainFont = Content.Load<SpriteFont>("Fonts/MainFont");
-            fadeOutTexture = Content.Load<Texture2D>("Textures/UI/ScreenFadeOut");
+            fadeOutTexture = LoadTex("UI/ScreenFadeOut");
 
-            Player.playerSpritesheet = Content.Load<Texture2D>("Textures/Spritesheets/PlayerShip");
-            Player.playerAfterImageTexture = Content.Load<Texture2D>("Textures/Objects/PlayerAfterImage");
-            Bullet.bulletTexture = Content.Load<Texture2D>("Textures/Objects/Bullet");
-            Missile.missileTexture = Content.Load<Texture2D>("Textures/Spritesheets/Missile");
-            Missile.targetLockedIndicator = Content.Load<Texture2D>("Textures/UI/TargetLockedIndicator");
-            Laser.laserTexture = Content.Load<Texture2D>("Textures/Objects/Laser");
-            BlackHoleBomb.bombTexture = Content.Load<Texture2D>("Textures/Objects/BlackHoleBomb");
-            BlackHoleBomb.accretionDiskTexture = Content.Load<Texture2D>("Textures/Objects/AccretionDisk");
+            Player.playerSpritesheet = LoadTex("Spritesheets/PlayerShip");
+            Player.playerAfterImageTexture = LoadTex("Objects/PlayerAfterImage");
+            Bullet.bulletTexture = LoadTex("Objects/Bullet");
+            Missile.missileTexture = LoadTex("Spritesheets/Missile");
+            Missile.targetLockedIndicator = LoadTex("UI/TargetLockedIndicator");
+            Laser.laserTexture = LoadTex("Objects/Laser");
+            BlackHoleBomb.bombTexture = LoadTex("Objects/BlackHoleBomb");
+            BlackHoleBomb.accretionDiskTexture = LoadTex("Objects/AccretionDisk");
 
-            UFO.ufoSpritesheet = Content.Load<Texture2D>("Textures/Spritesheets/UFO");
-            Slicer.slicerSpritesheet = Content.Load<Texture2D>("Textures/Spritesheets/Slicer");
-            Slicer.slicerAfterImageTexture = Content.Load<Texture2D>("Textures/Objects/SlicerAfterImage");
-            RayEnemy.raySpritesheet = Content.Load<Texture2D>("Textures/Spritesheets/Ray");
-            Stasis.stabilizerSpritesheet = Content.Load<Texture2D>("Textures/Spritesheets/Stasis");
-            ContinuousLaser.laserSpritesheet = Content.Load<Texture2D>("Textures/Spritesheets/ContinuousLaser");
-            StasisBeam.beamSpritesheet = Content.Load<Texture2D>("Textures/Spritesheets/StasisBeam");
+            UFO.ufoSpritesheet = LoadTex("Spritesheets/UFO");
+            Slicer.slicerSpritesheet = LoadTex("Spritesheets/Slicer");
+            Slicer.slicerAfterImageTexture = LoadTex("Objects/SlicerAfterImage");
+            RayEnemy.raySpritesheet = LoadTex("Spritesheets/Ray");
+            Stasis.stabilizerSpritesheet = LoadTex("Spritesheets/Stasis");
+            ContinuousLaser.laserSpritesheet = LoadTex("Spritesheets/ContinuousLaser");
+            StasisBeam.beamSpritesheet = LoadTex("Spritesheets/StasisBeam");
 
             int amountOfAsteroids = 5;
             Asteroid.asteroidTextures = new Texture2D[amountOfAsteroids];
             for (int a = 0; a < amountOfAsteroids; a++)
             {
-                Asteroid.asteroidTextures[a] = Content.Load<Texture2D>("Textures/Objects/Asteroid_" + (a + 1));
+                Asteroid.asteroidTextures[a] = LoadTex("Objects/Asteroid_" + (a + 1));
             }
 
             int amountOfPlanets = 4;
             Planet.planetsTextureArray = new Texture2D[amountOfPlanets];
             for (int p = 0; p < amountOfPlanets; p++)
             {
-                Planet.planetsTextureArray[p] = Content.Load<Texture2D>("Textures/Objects/Planet_" + (p + 1));
+                Planet.planetsTextureArray[p] = LoadTex("Objects/Planet_" + (p + 1));
             }
 
             int amountOfGoreTextures = 11;
             Gore.goreTextures = new Texture2D[amountOfGoreTextures];
             for (int g = 0; g < amountOfGoreTextures; g++)
             {
-                Gore.goreTextures[g] = Content.Load<Texture2D>("Textures/Objects/Gore/Gore_" + (g + 1));
+                Gore.goreTextures[g] = LoadTex("Objects/Gore/Gore_" + (g + 1));
             }
 
-            Star.starSpritesheet = Content.Load<Texture2D>("Textures/Objects/Star");
-            Explosion.explosionSpritesheet = Content.Load<Texture2D>("Textures/Spritesheets/Explosion");
-            Smoke.whitePixelTexture = Content.Load<Texture2D>("Textures/Objects/WhitePixel");
-            PowerUp.powerUpAura = Content.Load<Texture2D>("Textures/Objects/Power-Ups/PowerUpAura");
-            PowerUp.powerUpRing = Content.Load<Texture2D>("Textures/Objects/Power-Ups/PowerUpRing");
-            PowerUp.powerUpTextures[PowerUp.Attack] = Content.Load<Texture2D>("Textures/Objects/Power-Ups/AttackUp");
-            PowerUp.powerUpTextures[PowerUp.Health] = Content.Load<Texture2D>("Textures/Objects/Power-Ups/HealthUp");
-            PowerUp.powerUpTextures[PowerUp.Speed] = Content.Load<Texture2D>("Textures/Objects/Power-Ups/SpeedUp");
-            AbilityDrop.abilityRect = Content.Load<Texture2D>("Textures/Objects/Power-Ups/AbilityRect");
-            AbilityDrop.abilityTextures[AbilityDrop.RapidFire] = Content.Load<Texture2D>("Textures/Objects/Power-Ups/RapidFire");
+            Star.starSpritesheet = LoadTex("Objects/Star");
+            Explosion.explosionSpritesheet = LoadTex("Spritesheets/Explosion");
+            Smoke.whitePixelTexture = LoadTex("Objects/WhitePixel");
+            PowerUp.powerUpAura = LoadTex("Objects/Power-Ups/PowerUpAura");
+            PowerUp.powerUpRing = LoadTex("Objects/Power-Ups/PowerUpRing");
+            PowerUp.powerUpTextures[PowerUp.Attack] = LoadTex("Objects/Power-Ups/AttackUp");
+            PowerUp.powerUpTextures[PowerUp.Health] = LoadTex("Objects/Power-Ups/HealthUp");
+            PowerUp.powerUpTextures[PowerUp.Speed] = LoadTex("Objects/Power-Ups/SpeedUp");
+            AbilityDrop.abilityRect = LoadTex("Objects/Power-Ups/AbilityRect");
+            AbilityDrop.abilityTextures[AbilityDrop.RapidFire] = LoadTex("Objects/Power-Ups/RapidFire");
 
             ParallaxBackground.spaceSet1 = new Texture2D[2];
-            ParallaxBackground.spaceSet1[0] = Content.Load<Texture2D>("Textures/Backgrounds/SpaceBackgroundSet1/Space1_Part1");
-            ParallaxBackground.spaceSet1[1] = Content.Load<Texture2D>("Textures/Backgrounds/SpaceBackgroundSet1/Space1_Part2");
+            ParallaxBackground.spaceSet1[0] = LoadTex("Backgrounds/SpaceBackgroundSet1/Space1_Part1");
+            ParallaxBackground.spaceSet1[1] = LoadTex("Backgrounds/SpaceBackgroundSet1/Space1_Part2");
 
-            PlayerUI.playerHealthMark = Content.Load<Texture2D>("Textures/UI/HealthBarMark");
-            PlayerUI.playerHealthOutlines = Content.Load<Texture2D>("Textures/UI/HealthBarOutlines");
-            PlayerUI.clearEnvironmentIcon = Content.Load<Texture2D>("Textures/UI/ClearEnvironmentIcon");
-            PlayerUI.asteroidEnvironmentIcon = Content.Load<Texture2D>("Textures/UI/AsteroidEnvironmentIcon");
-            PlayerUI.abilityIcons[0] = Content.Load<Texture2D>("Textures/Objects/Icons/RapidFire");
-            PlayerUI.abilityIcons[1] = Content.Load<Texture2D>("Textures/Objects/Icons/BlackHole");
-            PlayerUI.abilityIcons[2] = Content.Load<Texture2D>("Textures/Objects/Icons/BlackHole");
-            PlayerUI.abilityIcons[3] = Content.Load<Texture2D>("Textures/Objects/Icons/IsotopeReactionContainer");
-            PlayerUI.abilityBorder = Content.Load<Texture2D>("Textures/UI/AbilityBorders");
-            WarningOverlay.warningOverlayTexture = Content.Load<Texture2D>("Textures/UI/AsteroidFieldWarningLines");
-            WarningOverlay.warningOverlayMark = Content.Load<Texture2D>("Textures/UI/AsteroidFieldWarningMark");
-            Button.menuStyleTop = Content.Load<Texture2D>("Textures/UI/ButtonOutlineTop");
-            Button.menuStyleBottom = Content.Load<Texture2D>("Textures/UI/ButtonOutlineBottom");
+            PlayerUI.playerHealthMark = LoadTex("UI/HealthBarMark");
+            PlayerUI.playerHealthOutlines = LoadTex("UI/HealthBarOutlines");
+            PlayerUI.clearEnvironmentIcon = LoadTex("UI/ClearEnvironmentIcon");
+            PlayerUI.asteroidEnvironmentIcon = LoadTex("UI/AsteroidEnvironmentIcon");
+            PlayerUI.abilityIcons[0] = LoadTex("Objects/Icons/RapidFire");
+            PlayerUI.abilityIcons[1] = LoadTex("Objects/Icons/BlackHole");
+            PlayerUI.abilityIcons[2] = LoadTex("Objects/Icons/BlackHole");
+            PlayerUI.abilityIcons[3] = LoadTex("Objects/Icons/IsotopeReactionContainer");
+            PlayerUI.abilityBorder = LoadTex("UI/AbilityBorders");
+            WarningOverlay.warningOverlayTexture = LoadTex("UI/AsteroidFieldWarningLines");
+            WarningOverlay.warningOverlayMark = LoadTex("UI/AsteroidFieldWarningMark");
+            Button.menuStyleTop = LoadTex("UI/ButtonOutlineTop");
+            Button.menuStyleBottom = LoadTex("UI/ButtonOutlineBottom");
             Color[] whiteColorArray = new Color[1] { Color.White } ;
             Texture2D whitePixel = new Texture2D(GraphicsDevice, 1, 1);     //Me being too lazy to make a 1 pixel texture and loading it through Content.mgcb
             whitePixel.SetData(whiteColorArray);
             Button.whitePixel = Slider.whitePixel = whitePixel;
-            Slider.sliderButtonTexture = Content.Load<Texture2D>("Textures/UI/SliderButton");
-            SettingsScreen.settingsPanel = Content.Load<Texture2D>("Textures/UI/SettingsPanel");
-            ModificationScreen.normalBarrelTexture = Content.Load<Texture2D>("Textures/Objects/Icons/NormalBarrel");
-            ModificationScreen.extendedBarrelTexture = Content.Load<Texture2D>("Textures/Objects/Icons/ExtendedBarrel");
-            ModificationScreen.powerfulBarrelTexture = Content.Load<Texture2D>("Textures/Objects/Icons/PowerfulBarrel");
-            ModificationScreen.normalWingsTexture = Content.Load<Texture2D>("Textures/Objects/Icons/NormalWings");
-            ModificationScreen.thinCutWingsTexture = Content.Load<Texture2D>("Textures/Objects/Icons/ThinCutWings");
-            ModificationScreen.hoverEquippedWingsTexture = Content.Load<Texture2D>("Textures/Objects/Icons/HoverEquippedWings");
-            ModificationScreen.chargedWingsTexture = Content.Load<Texture2D>("Textures/Objects/Icons/ChargedWings");
-            ModificationScreen.shipTexture = Content.Load<Texture2D>("Textures/Objects/Icons/Ship");
-            ModificationScreen.shipBarrels = Content.Load<Texture2D>("Textures/Objects/Icons/ShipBarrels");
-            ModificationScreen.shipPropellers = Content.Load<Texture2D>("Textures/Objects/Icons/ShipPropellers");
-            ModificationScreen.shipWings = Content.Load<Texture2D>("Textures/Objects/Icons/ShipWings");
-            ModificationScreen.bulletTexture = Content.Load<Texture2D>("Textures/Objects/Icons/Bullet");
-            ModificationScreen.missileTexture = Content.Load<Texture2D>("Textures/Objects/Icons/Missile");
-            ModificationScreen.rapidFireTexture = Content.Load<Texture2D>("Textures/Objects/Icons/RapidFire");
-            ModificationScreen.blackHoleTexture = Content.Load<Texture2D>("Textures/Objects/Icons/BlackHole");
-            ModificationScreen.shieldsTexture = Content.Load<Texture2D>("Textures/Objects/Icons/Shields");
-            ModificationScreen.isotopeReactionContainmentTexture = Content.Load<Texture2D>("Textures/Objects/Icons/IsotopeReactionContainer");
-            ModificationScreen.modificationHangarTexture = Content.Load<Texture2D>("Textures/Backgrounds/ModificationHangar");
+            Slider.sliderButtonTexture = LoadTex("UI/SliderButton");
+            SettingsScreen.settingsPanel = LoadTex("UI/SettingsPanel");
+            ModificationScreen.normalBarrelTexture = LoadTex("Objects/Icons/NormalBarrel");
+            ModificationScreen.extendedBarrelTexture = LoadTex("Objects/Icons/ExtendedBarrel");
+            ModificationScreen.powerfulBarrelTexture = LoadTex("Objects/Icons/PowerfulBarrel");
+            ModificationScreen.normalWingsTexture = LoadTex("Objects/Icons/NormalWings");
+            ModificationScreen.thinCutWingsTexture = LoadTex("Objects/Icons/ThinCutWings");
+            ModificationScreen.hoverEquippedWingsTexture = LoadTex("Objects/Icons/HoverEquippedWings");
+            ModificationScreen.chargedWingsTexture = LoadTex("Objects/Icons/ChargedWings");
+            ModificationScreen.shipTexture = LoadTex("Objects/Icons/Ship");
+            ModificationScreen.shipBarrels = LoadTex("Objects/Icons/ShipBarrels");
+            ModificationScreen.shipPropellers = LoadTex("Objects/Icons/ShipPropellers");
+            ModificationScreen.shipWings = LoadTex("Objects/Icons/ShipWings");
+            ModificationScreen.bulletTexture = LoadTex("Objects/Icons/Bullet");
+            ModificationScreen.missileTexture = LoadTex("Objects/Icons/Missile");
+            ModificationScreen.rapidFireTexture = LoadTex("Objects/Icons/RapidFire");
+            ModificationScreen.blackHoleTexture = LoadTex("Objects/Icons/BlackHole");
+            ModificationScreen.shieldsTexture = LoadTex("Objects/Icons/Shields");
+            ModificationScreen.isotopeReactionContainmentTexture = LoadTex("Objects/Icons/IsotopeReactionContainer");
+            ModificationScreen.modificationHangarTexture = LoadTex("Backgrounds/ModificationHangar");
 
-            Player.shootSound = Content.Load<SoundEffect>("Sounds/PlayerShoot");
-            Player.dashSound = Content.Load<SoundEffect>("Sounds//Dash");
-            Explosion.explosionSound = Content.Load<SoundEffect>("Sounds/Explosion_3");
-            UFO.shootSound = Content.Load<SoundEffect>("Sounds/UFOShoot");
-            UFO.deathSound = Content.Load<SoundEffect>("Sounds/UFODying");
-            Slicer.slicerChargeUpSound = Content.Load<SoundEffect>("Sounds/SlicerChargeUp");
-            Slicer.slicerAirCutSound = Content.Load<SoundEffect>("Sounds/SlicerAirCuts");
-            BlackHoleBomb.blackHoleOpeningSound = Content.Load<SoundEffect>("Sounds/BlackHoleBombOpen");
-            BlackHoleBomb.blackHoleActiveSound = Content.Load<SoundEffect>("Sounds/BlackHoleBombActive");
-            Stasis.beamSound = Content.Load<SoundEffect>("Sounds/StasisBeam");
+            Player.shootSound = LoadSFX("PlayerShoot");
+            Player.dashSound = LoadSFX("/Dash");
+            Explosion.explosionSound = LoadSFX("Explosion_3");
+            UFO.shootSound = LoadSFX("UFOShoot");
+            UFO.deathSound = LoadSFX("UFODying");
+            Slicer.slicerChargeUpSound = LoadSFX("SlicerChargeUp");
+            Slicer.slicerAirCutSound = LoadSFX("SlicerAirCuts");
+            BlackHoleBomb.blackHoleOpeningSound = LoadSFX("BlackHoleBombOpen");
+            BlackHoleBomb.blackHoleActiveSound = LoadSFX("BlackHoleBombActive");
+            Stasis.beamSound = LoadSFX("StasisBeam");
             MusicManager.titleMusic = Content.Load<Song>("Sounds/Music/JotS_Title");
             MusicManager.mainMusic = Content.Load<Song>("Sounds/Music/JotS_Main");
 
@@ -545,6 +545,16 @@ namespace Journey_Of_The_Ship
                 float starFallSpeed = (float)random.NextDouble() * 0.5f;
                 Star.NewStarEffect(new Vector2(starSpawnPosX, starSpawnPosY), new Vector2(0f, starFallSpeed), 0f, random.Next(0, 2));
             }
+        }
+
+        private Texture2D LoadTex(string path)
+        {
+            return Content.Load<Texture2D>("Textures/" + path);
+        }
+
+        private SoundEffect LoadSFX(string path)
+        {
+            return Content.Load<SoundEffect>("Sounds/" + path);
         }
 
         /*public static void DrawDebugRect(GraphicsDevice graphicsDevice, SpriteBatch spriteBatch, Rectangle rect)

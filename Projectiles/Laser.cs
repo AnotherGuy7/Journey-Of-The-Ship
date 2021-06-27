@@ -5,8 +5,8 @@ namespace Journey_Of_The_Ship.Projectiles
 {
     public class Laser : Projectile
     {
+        public override CollisionType collisionType => CollisionType.EnemyProjectiles;
         public override CollisionType[] colliderTypes => new CollisionType[1] { CollisionType.Player };
-        public override CollisionType collisionType => CollisionType.Projectiles;
 
         public static Texture2D laserTexture;
 
@@ -16,12 +16,11 @@ namespace Journey_Of_The_Ship.Projectiles
 
         private int lifeTimer = 0;
 
-        public static void NewLaser(Vector2 position, Vector2 velocity, bool friendly)
+        public static void NewLaser(Vector2 position, Vector2 velocity)
         {
             Laser currentInstance = new Laser();
             currentInstance.position = position;
             currentInstance.velocity = velocity;
-            currentInstance.friendly = friendly;
             currentInstance.hitbox = new Rectangle((int)currentInstance.position.X, (int)currentInstance.position.Y, LaserWidth, LaserHeight);
             Main.activeProjectiles.Add(currentInstance);
         }

@@ -9,7 +9,7 @@ namespace Journey_Of_The_Ship.Projectiles
     public class Missile : Projectile
     {
         public override CollisionType[] colliderTypes => new CollisionType[2] { CollisionType.Enemies, CollisionType.Obstacles };
-        public override CollisionType collisionType => CollisionType.Projectiles;
+        public override CollisionType collisionType => CollisionType.FriendlyProjectiles;
 
         public static Texture2D missileTexture;
         public static Texture2D targetLockedIndicator;
@@ -28,12 +28,11 @@ namespace Journey_Of_The_Ship.Projectiles
         private int frame = 0;
         private int frameCounter = 0;
 
-        public static void NewMissile(Vector2 position, Vector2 velocity, bool friendly)
+        public static void NewMissile(Vector2 position, Vector2 velocity)
         {
             Missile currentInstance = new Missile();
             currentInstance.position = position;
             currentInstance.velocity = velocity;
-            currentInstance.friendly = friendly;
             currentInstance.hitbox = new Rectangle((int)currentInstance.position.X, (int)currentInstance.position.Y, MissileWidth, MissileHeight);
             Main.activeProjectiles.Add(currentInstance);
         }

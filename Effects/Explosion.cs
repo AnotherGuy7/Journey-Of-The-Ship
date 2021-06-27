@@ -13,6 +13,7 @@ namespace Journey_Of_The_Ship.Effects
         private const int ExplosionWidth = 16;
         private const int ExplosionHeight = 16;
 
+        private int frameAdd = 0;
         private Vector2 position;
         private Vector2 velocity = Vector2.Zero;
         private Rectangle animRect;
@@ -26,6 +27,7 @@ namespace Journey_Of_The_Ship.Effects
             newInstance.position = position;
             newInstance.velocity = velocity;
             newInstance.rotation = rotation;
+            newInstance.frameAdd = Main.random.Next(0, 1 + 1) * 4;
             newInstance.animRect = new Rectangle(0, 0, ExplosionWidth, ExplosionHeight);
             Main.activeEffects.Add(newInstance);
         }
@@ -33,11 +35,11 @@ namespace Journey_Of_The_Ship.Effects
         public override void Update()
         {
             frameCounter++;
-            if (frameCounter >= 8)
+            if (frameCounter >= 4)
             {
                 frame++;
                 frameCounter = 0;
-                animRect = new Rectangle(0, frame * ExplosionHeight, ExplosionWidth, ExplosionHeight);
+                animRect = new Rectangle(0, (frame + frameAdd) * ExplosionHeight, ExplosionWidth, ExplosionHeight);
                 if (frame >= MaxFrames)
                 {
                     frame = 0;

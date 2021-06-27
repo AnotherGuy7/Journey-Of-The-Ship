@@ -24,6 +24,9 @@ namespace Journey_Of_The_Ship.UI
         private Color healthMarkDrawColor = Color.White;
         private Color abilityDrawColor = Color.White;
 
+        private Vector2 abilityRequirementTextSize;
+        private int previousAbilityNumber = -1;
+
         public static void InitializePlayerUI()
         {
             PlayerUI newInstance = new PlayerUI();
@@ -36,8 +39,14 @@ namespace Journey_Of_The_Ship.UI
             healthMarkDrawColor.G = (byte)MathHelper.Lerp(healthGreen.G, healthRed.G, 1f - (Main.playerHealth / 6f));
             healthMarkDrawColor.B = (byte)MathHelper.Lerp(healthGreen.B, healthRed.B, 1f - (Main.playerHealth / 6f));
 
-            float fadeColor = MathHelper.Lerp(0f, 1f, (float)(Main.player.killsNeededForAbility / Main.player.killsNeededRequirement));
-            abilityDrawColor = new Color(fadeColor, fadeColor, fadeColor);
+            if (previousAbilityNumber != Main.player.killsNeededForAbility)
+            {
+                float fadeColor = MathHelper.Lerp(0f, 1f, 1f - (Main.player.killsNeededForAbility / (float)Main.player.killsNeededRequirement));
+                abilityDrawColor = new Color(fadeColor, fadeColor, fadeColor);
+
+                abilityRequirementTextSize = Main.mainFont.MeasureString(Main.player.killsNeededForAbility.ToString()) * 0.3f;
+                previousAbilityNumber = Main.player.killsNeededForAbility;
+            }
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -56,9 +65,10 @@ namespace Journey_Of_The_Ship.UI
             {
                 Vector2 abilityIconPosition = new Vector2(Main.desiredResolutionWidth - 22f, Main.desiredResolutionHeight - 22f);
                 Vector2 abilityIconCenter = abilityIconPosition + new Vector2(abilityBorder.Width / 2f, abilityBorder.Height / 2f);
-                spriteBatch.Draw(abilityBorder, abilityIconPosition, Color.White);
-                spriteBatch.Draw(abilityIcons[(int)Player.abilityType - 1], abilityIconCenter, null, abilityDrawColor, 0f, new Vector2(10f, 10f), 1f, SpriteEffects.None, 0f);
-                spriteBatch.DrawString(Main.mainFont, Main.player.killsNeededForAbility.ToString(), abilityIconCenter, Color.White * uiAlpha, 0f, new Vector2(10f, 10f), 0.3f, SpriteEffects.None, 0f);
+                Vector2 abilityIconRequirementNumberPosition = abilityIconPosition + new Vector2(abilityBorder.Width, abilityBorder.Height) - abilityRequirementTextSize + new Vector2(2f, 2f);
+                spriteBatch.Draw(abilityBorder, abilityIconPosition, Color.White * uiAlpha);
+                spriteBatch.Draw(abilityIcons[(int)Player.abilityType - 1], abilityIconCenter, null, abilityDrawColor * uiAlpha, 0f, new Vector2(10f, 10f), 1f, SpriteEffects.None, 0f);
+                spriteBatch.DrawString(Main.mainFont, Main.player.killsNeededForAbility.ToString(), abilityIconRequirementNumberPosition, Color.White * uiAlpha, 0f, new Vector2(10f, 10f), 0.3f, SpriteEffects.None, 0f);
             }
 
             DrawEnvironmentalIcon(spriteBatch);

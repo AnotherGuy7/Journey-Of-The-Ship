@@ -5,8 +5,8 @@ namespace Journey_Of_The_Ship.Projectiles
 {
     public class Bullet : Projectile
     {
+        public override CollisionType collisionType => CollisionType.FriendlyProjectiles;
         public override CollisionType[] colliderTypes => new CollisionType[2] { CollisionType.Enemies, CollisionType.Obstacles };
-        public override CollisionType collisionType => CollisionType.Projectiles;
 
         public static Texture2D bulletTexture;
 
@@ -16,12 +16,11 @@ namespace Journey_Of_The_Ship.Projectiles
 
         private int lifeTimer = 0;
 
-        public static void NewBullet(Vector2 position, Vector2 velocity, bool friendly)
+        public static void NewBullet(Vector2 position, Vector2 velocity)
         {
             Bullet currentInstance = new Bullet();
             currentInstance.position = position;
             currentInstance.velocity = velocity;
-            currentInstance.friendly = friendly;
             currentInstance.hitbox = new Rectangle((int)currentInstance.position.X, (int)currentInstance.position.Y, BulletWidth, BulletHeight);
             Main.activeProjectiles.Add(currentInstance);
         }

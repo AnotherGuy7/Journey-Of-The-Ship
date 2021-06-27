@@ -30,12 +30,11 @@ namespace Journey_Of_The_Ship.Projectiles
         private int activeSoundTimer = 0;
         private Rectangle animRect;
 
-        public static void NewBlackHoleBomb(Vector2 position, Vector2 velocity, bool friendly)
+        public static void NewBlackHoleBomb(Vector2 position, Vector2 velocity)
         {
             BlackHoleBomb currentInstance = new BlackHoleBomb();
             currentInstance.position = position;
             currentInstance.velocity = velocity;
-            currentInstance.friendly = friendly;
             currentInstance.hitbox = new Rectangle((int)currentInstance.position.X, (int)currentInstance.position.Y, BombWidth, BombHeight);
             Main.activeProjectiles.Add(currentInstance);
         }

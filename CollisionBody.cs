@@ -25,8 +25,9 @@ namespace Journey_Of_The_Ship
             Player,
             Enemies,
             Obstacles,
-            Projectiles,
-            PowerUp
+            FriendlyProjectiles,
+            EnemyProjectiles
+            //PowerUp
         }
 
         public virtual void Initialize()
@@ -44,9 +45,9 @@ namespace Journey_Of_The_Ship
             {
                 if (hitbox.Intersects(intersector.hitbox))
                 {
-                    for (int c = 0; c < intersector.colliderTypes.Length; c++)
+                    for (int c = 0; c < colliderTypes.Length; c++)
                     {
-                        if (intersector.colliderTypes[c] == collisionType)
+                        if (colliderTypes[c] == intersector.collisionType)
                         {
                             HandleCollisions(intersector, intersector.collisionType);
                             break;

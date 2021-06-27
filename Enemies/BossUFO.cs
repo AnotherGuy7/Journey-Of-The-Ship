@@ -1,20 +1,17 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Graphics;
-using Journey_Of_The_Ship.Effects;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Journey_Of_The_Ship.Effects;
 using Journey_Of_The_Ship.Projectiles;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System.Linq;
 
 namespace Journey_Of_The_Ship.Enemies
 {
     public class BossUFO : CollisionBody
     {
-        public override CollisionType[] colliderTypes => new CollisionType[1] { CollisionType.Projectiles };
         public override CollisionType collisionType => CollisionType.Enemies;
+        public override CollisionType[] colliderTypes => new CollisionType[1] { CollisionType.FriendlyProjectiles };
 
         public static Texture2D[] bossUFOAnimationArray;
-        public Vector2 position;
 
         private int frame = 0;
         private int frameCounter = 0;
@@ -66,11 +63,11 @@ namespace Journey_Of_The_Ship.Enemies
             {
                 if (Main.random.Next(0, 2) == 0)
                 {
-                    Laser.NewLaser(position + leftTurretPosition, shootVelocity, false);
+                    Laser.NewLaser(position + leftTurretPosition, shootVelocity);
                 }
                 else
                 {
-                    Laser.NewLaser(position + rightTurretPosition, shootVelocity, false);
+                    Laser.NewLaser(position + rightTurretPosition, shootVelocity);
                 }
                 shootCounter = 0;
             }
@@ -86,12 +83,9 @@ namespace Journey_Of_The_Ship.Enemies
             if (collider is Projectile)
             {
                 Projectile collidingProjectile = collider as Projectile;
-                if (collidingProjectile.friendly)
-                {
-                    health -= 1;
-                    Explosion.NewExplosion(collidingProjectile.position, Vector2.Zero);
-                    collidingProjectile.DestroyInstance(collidingProjectile);
-                }
+                health -= 1;
+                Explosion.NewExplosion(collidingProjectile.position, Vector2.Zero);
+                collidingProjectile.DestroyInstance(collidingProjectile);
             }
         }
 

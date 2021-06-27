@@ -5,8 +5,8 @@ namespace Journey_Of_The_Ship.Projectiles
 {
     public class StasisBeam : Projectile
     {
+        public override CollisionType collisionType => CollisionType.EnemyProjectiles;
         public override CollisionType[] colliderTypes => new CollisionType[1] { CollisionType.Player };
-        public override CollisionType collisionType => CollisionType.Projectiles;
         public override bool continuous => true;
 
 
