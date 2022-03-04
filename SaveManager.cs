@@ -23,6 +23,7 @@ namespace Journey_Of_The_Ship
             writer.WriteLine((int)Player.turretType);
             writer.WriteLine((int)Player.wingType);
             writer.WriteLine((int)Player.propellerType);
+            writer.WriteLine(Main.highScore);
             writer.Close();
             fileStream.Close();
         }
@@ -46,6 +47,7 @@ namespace Journey_Of_The_Ship
             Player.turretType = (Player.TurretTypes)Convert.ToInt32(reader.ReadLine());
             Player.wingType = (Player.WingTypes)Convert.ToInt32(reader.ReadLine());
             Player.propellerType = (Player.PropellerType)Convert.ToInt32(reader.ReadLine());
+            Main.highScore = Convert.ToInt32(reader.ReadLine());
             reader.Close();
             fileStream.Close();
         }

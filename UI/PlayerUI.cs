@@ -60,6 +60,7 @@ namespace Journey_Of_The_Ship.UI
             }
 
             spriteBatch.DrawString(Main.mainFont, "Score: " + Main.gameScore, scorePosition, Color.White * uiAlpha, 0f, Vector2.Zero, 0.7f, SpriteEffects.None, 0f);
+            spriteBatch.DrawString(Main.mainFont, "HS: " + Main.highScore, scorePosition + new Vector2(0f, 8f), Color.White * uiAlpha, 0f, Vector2.Zero, 0.4f, SpriteEffects.None, 0f);
 
             if (Player.abilityType != Player.AbilityType.None)
             {

@@ -53,6 +53,7 @@ namespace Journey_Of_The_Ship
         public static int fadeOutStartTime = 0;
         public static int fadeInStartTime = 0;
         public static int uiInteractionLayer = 1;
+        public static int highScore = 0;
 
         public static GameStates gameState = GameStates.GameState_Title;
         public static Events activeEvent = Events.None;
